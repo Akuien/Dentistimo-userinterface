@@ -1,0 +1,13 @@
+image: node:latest
+
+stages:
+  - build
+
+build:
+  stage: build
+  tags:
+    - docker
+
+  script:
+    - cd client
+    - npm install
