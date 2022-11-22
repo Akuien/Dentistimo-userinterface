@@ -8,6 +8,5 @@ build-job:
   tags:
     - docker
   script:
-    - echo  "Start building"
+    - cd client
     - npm install
-    - echo "Build complete."
