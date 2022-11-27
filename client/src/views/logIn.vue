@@ -47,25 +47,18 @@ export default {
     background-color: #3D5332;
     padding: 5px 32px;
     text-align: center;
-    margin: auto;
-    border: none;
-    float: left;
+    border: solid;
   }
   .button-2 {
     color: white;
     background-color: #3D5332;
     padding: 5px 32px;
     text-align: center;
-    margin: auto;
-    border: none;
-    float: right;
+    border: solid;
   }
   @media only screen and (min-device-width: 360px) and (max-device-height: 768px) and (-webkit-device-pixel-ratio: 3) {
     .main {
       max-width: 80%;
-    }
-    .Logo img {
-      width: 50%;
     }
   }
   </style>
