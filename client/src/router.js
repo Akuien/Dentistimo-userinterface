@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import UserInformation from './views/UserInformation.vue'
 import logIn from './views/logIn.vue'
-
+import VerifyEmail from './views/VerifyEmail.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -21,10 +21,14 @@ export default new Router({
       component: UserInformation
     },
     {
-     path: '/login',
+      path: '/login',
       name: 'login',
       component: logIn
+    },
+    {
+      path: '/verify/:id',
+      name: 'VerifyEmail',
+      component: VerifyEmail
     }
-    
   ]
 })
