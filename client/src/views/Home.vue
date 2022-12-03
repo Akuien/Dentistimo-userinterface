@@ -29,6 +29,7 @@ export default {
 
 <style>
 #map-container {
+height: auto;
 
 }
 </style>
