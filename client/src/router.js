@@ -5,6 +5,7 @@ import UserInformation from './views/UserInformation.vue'
 import logIn from './views/logIn.vue'
 import VerifyEmail from './views/VerifyEmail.vue'
 import Calender from './views/calender.vue'
+import Dentists from './views/dentist.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -35,6 +36,11 @@ export default new Router({
       path: '/calender',
       name: 'Calender',
       component: Calender
+    },
+    {
+      path: '/dentist',
+      name: 'Dentist',
+      component: Dentists
     }
   ]
 })
