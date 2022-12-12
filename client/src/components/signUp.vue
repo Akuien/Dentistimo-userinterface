@@ -6,27 +6,27 @@
         </div>
 
         <div class="form-group">
-          <input type="text" class="form-control" v-model="firstName" placeholder="First Name"/>
+          <input type="text" class="form-control" v-model="form.firstName" placeholder="First Name"/>
         </div>
 
         <div class="form-group">
-          <input type="text" class="form-control" v-model="lastName" placeholder="Last Name" />
+          <input type="text" class="form-control" v-model="form.lastName" placeholder="Last Name" />
         </div>
 
         <div class="form-group">
-          <input type="number" class="form-control" v-model="id" placeholder="ID" />
+          <input type="number" class="form-control" v-model="form.snn" placeholder="SNN" />
         </div>
 
         <div class="form-group">
-          <input type="text" class="form-control" v-model="phoneNumber" placeholder="Phone number"/>
+          <input type="text" class="form-control" v-model="form.phoneNumber" placeholder="Phone number"/>
         </div>
 
         <div class="form-group">
-          <input type="email" class="form-control" v-model="email" placeholder="Email" />
+          <input type="email" class="form-control" v-model="form.email" placeholder="Email" />
         </div>
 
         <div class="form-group">
-          <input type="password" class="form-control" v-model="password" placeholder="Password"/>
+          <input type="password" class="form-control" v-model="form.password" placeholder="Password"/>
         </div>
 
         <button style="background:#3D5332" class="btn btn-primary btn-block" @click="sendUserDetails()">Submit</button>
@@ -35,23 +35,40 @@
   </template>
 
 <script>
-import registerUser from '../registerUser'
 
 export default {
+  name: 'signUp',
   data() {
     return {
-      info: {
+      form: {
         firstName: '',
         lastName: '',
-        email: '',
-        password: '',
+        snn: '',
         phoneNumber: '',
-        id: ''
+        email: '',
+        password: ''
       }
     }
   },
+  mounted() {
+    this.sendUserDetails()
+  },
   methods: {
-    sendUserDetails() { registerUser.RegisterUser(this.info) }
+    sendUserDetails() {
+      const userInfo = {
+        firstName: this.form.firstName,
+        lastName: this.form.lastName,
+        snn: this.form.snn,
+        phoneNumber: this.form.phoneNumber,
+        email: this.form.email,
+        password: this.form.password
+      }
+
+      const newMessage = JSON.stringify(userInfo)
+
+      this.$client.publish('UserInfo/test', newMessage)
+      this.$client.subscribe('my/test/topic1')
+    }
   }
 }
 </script>
