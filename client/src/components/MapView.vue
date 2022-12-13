@@ -9,13 +9,6 @@
     </b-modal>
   </div>
 
-    <div class="row">
-      <div class="col-12">
-        <h5 class="text-center">
-          Select the following dentistry in your area to make an appointment.
-        </h5>
-      </div>
-    </div>
     <!-- /.row -->
     <div class="row">
       <div class="col-10">
