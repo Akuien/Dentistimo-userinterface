@@ -1,19 +1,18 @@
 <template>
   <div>
     <NavbarVue/>
-    <div id="map-container">
-<Map> </Map>
-</div>
+<MapView> </MapView>
+
   </div>
 </template>
 
 <script>
-import Map from '../components/MapBox.vue'
+import MapView from '../components/MapView.vue'
 import NavbarVue from '../components/Navbar.vue'
 export default {
   name: 'home',
   components: {
-    Map: Map,
+    MapView,
     NavbarVue
   },
   data() {
@@ -28,8 +27,5 @@ export default {
 </script>
 
 <style>
-#map-container {
-height: auto;
 
-}
 </style>
