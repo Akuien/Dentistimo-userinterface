@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="handleSubmit">
+    <form @submit.prevent="login">
       <div class="head">
       <h1>Welcome to dentistimo!
         Login
@@ -9,7 +9,7 @@
         <input
           type="email"
           class="form-control"
-          v-model="email"
+          v-model="form.email"
           placeholder="Email"
         />
       </div>
@@ -18,46 +18,86 @@
         <input
           type="password"
           class="form-control"
-          v-model="password"
+          v-model="form.password"
           placeholder="Password"
+          :invalid-feedback="invalidPassword"
         />
       </div>
       <button style="background:#3D5332" class="btn btn-primary btn-block">Submit</button>
     </form>
   </template>
 <script>
-import { Api } from '@/Api'
 export default {
-  name: 'logIn',
-  data() {
-    return {
-      email: '',
-      password: '',
-      error: ''
+  computed: {
+    invalidPassword() {
+      if (this.form.password.length > 0) {
+        return 'Enter at least 4 characters.'
+      }
+      return 'Please enter something.'
     }
   },
+  data() {
+    return {
+      form: {
+        email: '',
+        password: ''
+      },
+      show: true
+    }
+  },
+  mounted() {
+    this.loginResponse()
+  },
   methods: {
-    handleSubmit() {
-      const user = {
-        email: this.email,
-        password: this.password
+    onSubmit(event) {
+      event.preventDefault()
+      alert(JSON.stringify(this.form))
+    },
+    onreset(event) {
+      event.preventDefault()
+      this.email = ''
+      this.password = ''
+      this.show = false
+      this.$nextTick(() => {
+        this.show = true
+      })
+    },
+    login() {
+      const loginInfo = {
+        email: this.form.email,
+        password: this.form.password
       }
-      Api.post('/users/login', user).then(
-        (res) => {
-          // if successfull
-          if (res.status === 200) {
-            localStorage.setItem('token', res.data.token)
-            this.$emit('handleLogin', true)
-            this.$router.push('/')
-          }
-        },
-        (err) => {
-          console.log(err.response)
-          this.error = err.response.data.error
-          this.boxOne = ''
-          this.$bvModal.msgBoxOk('Invalid Credentials')
+      const logininformation = JSON.stringify(loginInfo)
+      this.$client.publish('LoginInfo/test', logininformation, 1, (error) => {
+        if (error) {
+          console.log(error)
+        } else {
+          console.log(logininformation)
         }
-      )
+      })
+    },
+    loginResponse() {
+      this.$client.on('message', (topic, message) => {
+        if (topic === 'pub/loginResponse') {
+          const userRespond = JSON.parse(message)
+
+          this.password = userRespond.password
+          this.email = userRespond.email
+
+          localStorage.setItem(
+            'localUsername',
+            JSON.stringify({
+              password: userRespond.password,
+              email: userRespond.email
+            })
+          )
+          this.$router.push('/home')
+          console.log('here')
+          console.log(localStorage)
+        } else {
+          console.log('error')
+        }
+      })
     }
   }
 }
