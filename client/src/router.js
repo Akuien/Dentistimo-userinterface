@@ -4,6 +4,8 @@ import Home from './views/Home.vue'
 import UserInformation from './views/UserInformation.vue'
 import logIn from './views/logIn.vue'
 import VerifyEmail from './views/VerifyEmail.vue'
+import Calender from './views/Calender.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -24,6 +26,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: logIn
+    },
+    {
+      path: '/calender/:id',
+      name: 'Calender',
+      component: Calender
     },
     {
       path: '/verify/:id',
