@@ -3,11 +3,17 @@
     <div id="nav">
       <router-link to="/">Home</router-link>
       <router-link to="/userinformation">userInformation</router-link>
+      <router-link to="/Login">Login</router-link>
     </div>
     <!-- Render the content of the current page view -->
     <router-view/>
   </div>
 </template>
+<script>
+
+export default {
+}
+</script>
 
 <style>
 #app {
