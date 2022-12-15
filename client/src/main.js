@@ -12,11 +12,11 @@ Vue.use(BootstrapVue)
 
 Vue.config.productionTip = false
 
-const connectUrl = 'wss://9f1a1ea00c6847a8809ba15c0fa8c4a1.s1.eu.hivemq.cloud:8884/mqtt'
+const connectUrl = 'wss://45fb8d87df7040eb8434cea2937cfb31.s1.eu.hivemq.cloud:8884/mqtt'
 
 Vue.prototype.$client = mqtt.connect(connectUrl, {
-  username: 'Kanokwan',
-  password: 'password',
+  username: 'Team5@Broker',
+  password: 'Team5@Broker',
   clean: true,
   clientId: 'mqtt001'
 })

@@ -44,7 +44,7 @@ background-color: #CFF8F8  ;
 }
 
 #sidebar-btn {
-
+color: black;
 }
 
 </style>
