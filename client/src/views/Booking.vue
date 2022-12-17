@@ -10,13 +10,14 @@
         </div>
 
         <div class="form-group">
-          <input type="text" class="form-control" v-model="form.day" placeholder="day" />
-        </div>
+        <b-form-group for="timepicker-valid">Choose a date
+      <b-form-datepicker v-model="form.day" locale="en"></b-form-datepicker></b-form-group>
+       </div>
 
-         <div class="form-group">
-          <input type="text" class="form-control" v-model="form.start" placeholder="start" />
-        </div>
-
+       <div class="form-group">
+         <b-form-group for="timepicker-valid">Choose a time
+    <b-form-timepicker id="datepicker-valid" :state="true" v-model="form.start"></b-form-timepicker></b-form-group>
+       </div>
         <div class="form-group">
           <input type="text" class="form-control" v-model="form.dentist" placeholder="dentist"/>
         </div>
