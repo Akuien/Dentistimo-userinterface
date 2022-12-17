@@ -5,6 +5,7 @@ import UserInformation from './views/UserInformation.vue'
 import logIn from './views/logIn.vue'
 import VerifyEmail from './views/VerifyEmail.vue'
 import Calender from './views/Calender.vue'
+import Booking from './views/Booking.vue'
 
 Vue.use(Router)
 
@@ -31,6 +32,11 @@ export default new Router({
       path: '/calender/:id',
       name: 'Calender',
       component: Calender
+    },
+    {
+      path: '/booking/:id',
+      name: 'Booking',
+      component: Booking
     },
     {
       path: '/verify/:id',

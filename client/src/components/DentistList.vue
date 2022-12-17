@@ -21,8 +21,11 @@
         <br />
         <p>
           <router-link :to="'/calender/' + dentist._id"
-            >Make an appointment</router-link
-          >
+            >Make an appointment</router-link>
+        </p>
+        <p>
+          <router-link :to="'/booking/' + dentist._id"
+            >Book appointment</router-link>
         </p>
       </li>
     </ul>
