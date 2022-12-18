@@ -21,7 +21,6 @@ Vue.prototype.$client = mqtt.connect(connectUrl, {
   clientId: 'mqttUI'
 })
 
-
 new Vue({
   router,
   store,
