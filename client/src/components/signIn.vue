@@ -47,8 +47,32 @@ export default {
   },
   mounted() {
     this.loginResponse()
+    this.subscribe()
   },
   methods: {
+    Authentication() {
+      this.$router.push('/signUp')
+    },
+    subscribe() {
+      this.$client.subscribe('pub/#', 1, (error, res) => {
+        if (error) {
+          console.log(error)
+        }
+        console.log('Subscribed to ', res)
+      })
+    },
+    handleClick() {
+      localStorage.removeItem('token')
+      this.$router.push('/')
+    },
+    created() {
+      const local = JSON.parse(localStorage.getItem('localCredentials'))
+      this.$store.state.email = local.email
+      this.$store.state.password = local.password
+      this.$store.state.id = local.id
+      console.log(this.$store.state.email, this.$store.state.id)
+    },
+
     onSubmit(event) {
       event.preventDefault()
       alert(JSON.stringify(this.form))
@@ -80,18 +104,19 @@ export default {
       this.$client.on('message', (topic, message) => {
         if (topic === 'pub/loginResponse') {
           const userRespond = JSON.parse(message)
-
-          this.password = userRespond.password
-          this.email = userRespond.email
+          this.$store.state.id = userRespond._id
+          this.$store.state.password = userRespond.password
+          this.$store.state.email = userRespond.email
 
           localStorage.setItem(
-            'localUsername',
+            'localCredentials',
             JSON.stringify({
+              id: userRespond._id,
               password: userRespond.password,
               email: userRespond.email
             })
           )
-          this.$router.push('/home')
+          this.$router.push('/')
           console.log('here')
           console.log(localStorage)
         } else {
