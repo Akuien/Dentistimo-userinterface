@@ -66,7 +66,6 @@ export default {
       const newMessage = JSON.stringify(userInfo)
 
       this.$client.publish('UserInfo/test', newMessage)
-      this.$client.subscribe('my/test/topic1')
     }
   }
 }

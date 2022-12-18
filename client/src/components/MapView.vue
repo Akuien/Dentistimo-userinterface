@@ -49,6 +49,7 @@ export default {
       console.log('Connected!')
     })
     this.$client.subscribe('dentist/getAllDentists')
+    this.$client.publish('my/test/topic99', 'Hello, I am dentist and ironically toothless')
     this.$client.publish('dentists', 'The ui component wants dentists list!!')
 
     this.$client.on('message', (topic, payload) => {

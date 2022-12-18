@@ -21,14 +21,6 @@ Vue.prototype.$client = mqtt.connect(connectUrl, {
   clientId: 'mqttUI'
 })
 
-/* const connectUrl = 'wss://9f1a1ea00c6847a8809ba15c0fa8c4a1.s1.eu.hivemq.cloud:8884/mqtt'
-
-Vue.prototype.$client = mqtt.connect(connectUrl, {
-  username: 'Kanokwan',
-  password: 'password',
-  clean: true,
-  clientId: 'mqtt001'
-}) */
 
 new Vue({
   router,
