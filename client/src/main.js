@@ -6,6 +6,7 @@ import 'leaflet/dist/leaflet.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import mqtt from 'mqtt'
+import store from './store/store'
 
 Vue.use(BootstrapVue)
 
@@ -31,5 +32,6 @@ Vue.prototype.$client = mqtt.connect(connectUrl, {
 
 new Vue({
   router,
+  store,
   render: function (h) { return h(App) }
 }).$mount('#app')
