@@ -39,13 +39,13 @@ export default {
     }
   },
   mounted() {
+    this.$client.publish('dentists', 'The ui component wants this ' + `${this.$route.params.id}` + ' dentist!!')
     this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
-      console.log('Step 1 Publish' + `${this.$route.params.id}`)
-
       if (error) {
         console.log(error)
       }
     })
+
     this.$client.on('message', (topic, payload) => {
       console.log(topic, payload.toString())
       if (topic === 'ui/get-dental-clinic') {
