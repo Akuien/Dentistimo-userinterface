@@ -4,10 +4,9 @@
         <div class="head">
           <h1>booking for {{currentDentist.owner }}</h1>
         </div>
-
-        <div class="form-group">
-          <input type="text" class="form-control" v-model="form.user" placeholder="User"/>
-        </div>
+        <b-alert v-model="showDismissibleAlert" variant="danger" dismissible>
+          {{  notify }}
+      </b-alert>
 
         <div class="form-group">
         <b-form-group for="timepicker-valid">Choose a date
@@ -30,9 +29,10 @@ export default {
   name: 'booking',
   data() {
     return {
+      notify: '',
+      showDismissibleAlert: false,
       currentDentist: {},
       form: {
-        user: '',
         day: '',
         start: ''
       }
@@ -66,14 +66,28 @@ export default {
   methods: {
     sendBookingDetails() {
       const bookingInfo = {
-        user: this.form.user,
+        user: this.$store.state.id,
         day: this.form.day,
         start: this.form.start,
         dentist: `${this.$route.params.id}`,
         issuance: uuid.v4()
       }
+
       const newRewquest = JSON.stringify(bookingInfo)
+
       this.$client.publish('BookingInfo/test', newRewquest)
+      console.log('testing')
+      this.$client.on('message', (topic, message) => {
+        console.log(topic, message.toString())
+        if (topic === 'ui/approved') {
+          this.notify = 'Your have booked a new appointment!'
+          this.showDismissibleAlert = true
+          console.log('testing 2')
+          const response = JSON.parse(message)
+          console.log(response + 'Response RECEIVED!!!!')
+          console.log(response)
+        }
+      })
     }
   }
 }
