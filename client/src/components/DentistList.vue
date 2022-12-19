@@ -21,7 +21,7 @@
         <br />
         <p>
           <router-link :to="'/calender/' + dentist._id"
-            >only calender and timeslots</router-link>
+            >only calender and timeslots to test not for booking</router-link>
         </p>
         <p>
           <router-link :to="'/booking/' + dentist._id"
