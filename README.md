@@ -19,5 +19,34 @@ User interface is the component which communicates with other 4 components throu
 ## Architectural Style
 * Publish and Subscribe
  
-This component acts as both a publisher and subscriber.
+This component acts as both a publisher and subscriber.When the user interacts with the user interface it will publish and subscribe to the same topic accordingly, In this way it can connect to other 4 components in the system.
+
+## Technologies
+
+* VueJS
+* Mapbox
+* Mqtt
+* HiveMQ cloud
+* Geojson
+* Leaflet
+* Vuex
+* uuid 
+
+## Get started
+
+* Clone the repository using https://git.chalmers.se/courses/dit355/dit356-2022/t-5/t-5-userinterface.git
+* Run "cd client" in the terminal
+* Install the dependencies by running "npm install"
+* At the end run "npm run serve" to start the application
+
+
+## Team members
+
+* Akuen Akoi Deng
+* Marwa Selwaye
+* Kanokwan Haesatith
+* Cynthia Tarwireyi
+* Nazli Moghaddam
+* Jonna Johansson
+* Sergey Balan
 
