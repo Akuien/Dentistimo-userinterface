@@ -31,7 +31,8 @@ export default {
     return {
       notify: '',
       showDismissibleAlert: false,
-      currentDentist: {},
+      currentDentist: [],
+      numberOfDentists: 0,
       form: {
         day: '',
         start: ''
@@ -39,7 +40,7 @@ export default {
     }
   },
   mounted() {
-    this.$client.subscribe('dentist/getdentistbyId')
+    this.$client.subscribe('ui/dentist/getdentistbyId')
     this.$client.publish('dentists', 'The ui component wants this ' + `${this.$route.params.id}` + ' dentist!!')
     this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
       if (error) {
@@ -49,18 +50,16 @@ export default {
 
     this.$client.on('message', (topic, payload) => {
       console.log(topic, payload.toString())
-      if (topic === 'dentist/getdentistbyId') {
+      if (topic === 'ui/dentist/getdentistbyId') {
         console.log('Dentist RECEIVED!!!!')
-        const response = payload
-        console.log('RESPONSE HERE')
-        console.log(response)
-        console.log('Dentists: ', response.dentists)
+        const response = JSON.parse(payload)
+        console.log('Dentist: ', response)
 
         this.currentDentist = response
-        this.numberOfDentists = response.dentists
-        this.openingHours = response.openinghours
-
+        this.numberOfDentists = this.currentDentist.numberOfDentists
         console.log(this.currentDentist)
+        console.log(this.currentDentist.numberOfDentists)
+        console.log(this.numberOfDentists)
       }
     })
   },
@@ -71,7 +70,8 @@ export default {
         day: this.form.day,
         start: this.form.start,
         dentist: `${this.$route.params.id}`,
-        issuance: uuid.v4()
+        issuance: uuid.v4(),
+        numberOfDentists: this.numberOfDentists
       }
       this.$client.subscribe('ui/approved')
       const newRewquest = JSON.stringify(bookingInfo)
