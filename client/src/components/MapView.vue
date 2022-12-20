@@ -46,14 +46,14 @@ export default {
   mounted() {
     this.$refs.modal.show()
     this.$client.on('connect', () => {
-      console.log('Connected!')
+      // console.log('Connected!')
     })
     this.$client.subscribe('dentist/getAllDentists')
     this.$client.publish('my/test/topic99', 'Hello, I am dentist and ironically toothless')
     this.$client.publish('dentists', 'The ui component wants dentists list!!')
 
     this.$client.on('message', (topic, payload) => {
-      console.log(topic, payload.toString())
+      // console.log(topic, payload.toString())
       if (topic === 'dentist/getAllDentists') {
         const response = JSON.parse(payload)
         this.dentists = response.map(response => {
@@ -61,7 +61,7 @@ export default {
           return response
         })
       }
-      console.log(this.dentists)
+      // console.log(this.dentists)
     })
   },
   methods: {
