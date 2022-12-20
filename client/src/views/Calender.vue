@@ -14,15 +14,9 @@
           :min="min"
           :max="max"
           locale="en-US"
-          >
-          <b-container>
+>
      <h1> Available Time Slots </h1>
-     <button
-              type="btn"
-              class="btn btn-primary"
-              data-toggle="modal"
-              data-target="#clinic"
-              @click="showTimeslots"> Check Time Slots </button>
+     <TimeSlots> </TimeSlots>
    <b-card
     style="max-width: 10rem;"
     class="mb-2" >
@@ -48,9 +42,6 @@
     </b-form-radio>
      </b-card>
 
-<Timeslots></Timeslots>
-</b-container>
-
          <!--  <TimeSlots
       :timeslotDay="timeslotDay"
       :value="value"
@@ -63,12 +54,10 @@
 </template>
 
 <script>
-
-import Timeslots from '../components/TimeSlots.vue'
-
+import TimeSlots from '../components/TimeSlots.vue'
 export default {
   name: 'Calendar',
-  components: { Timeslots },
+  components: { TimeSlots },
   data() {
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -94,21 +83,10 @@ export default {
       }
     }
   },
-
-  mounted() {
-    this.$client.on('connect', () => {
-      console.log('Connected!')
-    })
-    this.$client.subscribe('sendTimeSlots')
-    this.$client.publish('appointment/getAllTimeslots', 'send us timeslots')
-    this.$client.on('message', (topic, payload) => {
-      if (topic === 'sendTimeSlots') {
-        const response = JSON.parse(payload)
-        const getJson = JSON.parse(JSON.stringify(response))
-        this.appointments = getJson
-      } console.log(this.appointments)
-    })
+  created() {
+    this.showTimeslots()
   },
+
   methods: {
     dateDisabled(ymd, date) {
     // Disable weekends (Sunday = `0`, Saturday = `6`)
@@ -117,12 +95,15 @@ export default {
       return weekday === 0 || weekday === 6
     },
     showTimeslots(appointments) {
-      this.$client.publish('appointment/getAllTimeslots')
+      this.$client.on('connect', () => {
+        console.log('Connected!')
+      })
+      this.$client.publish('appointment/getAllTimeslots', 'send us timeslots')
       this.$client.subscribe('sendTimeSlots')
       this.$client.on('message', (topic, message) => {
         if (topic === 'sendTimeSlots') {
-          const string = message.toString()
-          const json = JSON.parse(string)
+          const response = message.toString()
+          const json = JSON.parse(response)
           this.appointments = json
         } console.log(this.appointments)
       })
