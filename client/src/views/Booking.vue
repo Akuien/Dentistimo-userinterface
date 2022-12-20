@@ -1,10 +1,10 @@
 <template>
     <div>
-      <form>
+      <b-form @submit.prevent="handleSubmit">
         <div class="head">
           <h1>booking for {{currentDentist.owner }}</h1>
         </div>
-        <b-alert v-model="showDismissibleAlert" variant="danger" dismissible>
+        <b-alert v-model="showDismissibleAlert" variant="success" dismissible>
           {{  notify }}
       </b-alert>
 
@@ -17,8 +17,8 @@
          <b-form-group for="timepicker-valid">Choose a time
     <b-form-timepicker id="datepicker-valid" :state="true" v-model="form.start"></b-form-timepicker></b-form-group>
        </div>
-        <button style="background:#3D5332" class="btn btn-primary btn-block" @click="sendBookingDetails()">Submit</button>
-      </form>
+        <button style="background:#3D5332" class="btn btn-primary btn-block">Submit</button>
+      </b-form>
     </div>
   </template>
 
@@ -39,6 +39,7 @@ export default {
     }
   },
   mounted() {
+    this.$client.subscribe('dentist/getdentistbyId')
     this.$client.publish('dentists', 'The ui component wants this ' + `${this.$route.params.id}` + ' dentist!!')
     this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
       if (error) {
@@ -48,9 +49,9 @@ export default {
 
     this.$client.on('message', (topic, payload) => {
       console.log(topic, payload.toString())
-      if (topic === 'ui/get-dental-clinic') {
+      if (topic === 'dentist/getdentistbyId') {
         console.log('Dentist RECEIVED!!!!')
-        const response = JSON.parse(payload)
+        const response = payload
         console.log('RESPONSE HERE')
         console.log(response)
         console.log('Dentists: ', response.dentists)
@@ -64,7 +65,7 @@ export default {
     })
   },
   methods: {
-    sendBookingDetails() {
+    handleSubmit() {
       const bookingInfo = {
         user: this.$store.state.id,
         day: this.form.day,
@@ -72,19 +73,18 @@ export default {
         dentist: `${this.$route.params.id}`,
         issuance: uuid.v4()
       }
-
+      this.$client.subscribe('ui/approved')
       const newRewquest = JSON.stringify(bookingInfo)
-
       this.$client.publish('BookingInfo/test', newRewquest)
       console.log('testing')
+
       this.$client.on('message', (topic, message) => {
         console.log(topic, message.toString())
         if (topic === 'ui/approved') {
           this.notify = 'Your have booked a new appointment!'
           this.showDismissibleAlert = true
-          console.log('testing 2')
+
           const response = JSON.parse(message)
-          console.log(response + 'Response RECEIVED!!!!')
           console.log(response)
         }
       })
