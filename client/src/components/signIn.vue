@@ -107,13 +107,19 @@ export default {
           this.$store.state.id = userRespond._id
           this.$store.state.password = userRespond.password
           this.$store.state.email = userRespond.email
+          this.$store.state.firstName = userRespond.firstName
+          this.$store.state.lastName = userRespond.lastName
+          this.$store.state.phoneNumber = userRespond.phoneNumber
 
           localStorage.setItem(
             'localCredentials',
             JSON.stringify({
               id: userRespond._id,
               password: userRespond.password,
-              email: userRespond.email
+              email: userRespond.email,
+              firstName: userRespond.firstName,
+              lastName: userRespond.lastName,
+              phoneNumber: userRespond.phoneNumber
             })
           )
           this.$router.push('/')
