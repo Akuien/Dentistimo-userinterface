@@ -80,6 +80,8 @@ export default {
         numberOfDentists: this.numberOfDentists
       }
       this.$client.subscribe('ui/approved')
+      this.$client.subscribe('ui/notapproved')
+
       const newRewquest = JSON.stringify(bookingInfo)
       this.$client.publish('BookingInfo/test', newRewquest)
       console.log('testing')
@@ -92,7 +94,7 @@ export default {
           this.showDismissibleAlert2 = false
           const response = JSON.parse(message)
           console.log(response)
-        } else {
+        } else if (topic === 'ui/notapproved') {
           this.showDismissibleAlert = false
           this.showDismissibleAlert2 = true
           this.notify2 = 'Your booking was unsucsessful!!'
