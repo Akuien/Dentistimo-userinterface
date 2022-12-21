@@ -53,7 +53,7 @@ export default {
     this.$client.publish('dentists', 'The ui component wants dentists list!!')
 
     this.$client.on('message', (topic, payload) => {
-      // console.log(topic, payload.toString())
+      console.log(topic, payload.toString())
       if (topic === 'dentist/getAllDentists') {
         const response = JSON.parse(payload)
         this.dentists = response.map(response => {

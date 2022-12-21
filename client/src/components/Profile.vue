@@ -1,5 +1,4 @@
 <template>
-<b-container-fluid>
 <div class="page">
     <div id="profile"> Profile <img id="tooth" src="https://cdn-icons-png.flaticon.com/512/3143/3143588.png" alt= "tooth"></div>
 <div class="container py-5 h-100">
@@ -55,7 +54,6 @@
   </div>
 </div>
 </div>
-</b-container-fluid>
 </template>
 <script>
 export default {
