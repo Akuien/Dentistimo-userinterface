@@ -14,9 +14,8 @@
 
         <div class="form-group">
         <b-form-group for="timepicker-valid">Choose a date
-      <b-form-datepicker v-model="form.day" locale="en"></b-form-datepicker></b-form-group>
+      <b-form-datepicker v-model="form.date" locale="en"></b-form-datepicker></b-form-group>
        </div>
-
        <div class="form-group">
          <b-form-group for="timepicker-valid">Choose a time
     <b-form-timepicker id="datepicker-valid" :state="true" v-model="form.start"></b-form-timepicker></b-form-group>
@@ -40,14 +39,14 @@ export default {
       currentDentist: [],
       numberOfDentists: 0,
       form: {
-        day: '',
+        date: '',
         start: ''
       }
     }
   },
   mounted() {
     this.$client.subscribe('ui/dentist/getdentistbyId')
-    this.$client.publish('dentists', 'The ui component wants this ' + `${this.$route.params.id}` + ' dentist!!')
+    this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
     this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
       if (error) {
         console.log(error)
@@ -71,9 +70,14 @@ export default {
   },
   methods: {
     handleSubmit() {
+      const weekday = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+      const dayOfWeek = new Date(this.form.date)
+      const theDay = dayOfWeek.getDay()
+
       const bookingInfo = {
         user: this.$store.state.id,
-        day: this.form.day,
+        day: weekday[theDay],
+        date: this.form.date,
         start: this.form.start,
         dentist: `${this.$route.params.id}`,
         issuance: uuid.v4(),
