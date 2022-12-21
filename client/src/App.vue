@@ -4,6 +4,7 @@
       <router-link to="/">Home</router-link>
       <router-link to="/userinformation">Profile</router-link>
       <router-link to="/Login">Login</router-link>
+      <router-link to="/user/appointments">Appointments</router-link>
     </div>
     <!-- Render the content of the current page view -->
     <router-view/>

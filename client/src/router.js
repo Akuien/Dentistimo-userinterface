@@ -6,6 +6,7 @@ import logIn from './views/logIn.vue'
 import VerifyEmail from './views/VerifyEmail.vue'
 import Calender from './views/Calender.vue'
 import Booking from './views/Booking.vue'
+import Bookings from './views/Bookings.vue'
 
 Vue.use(Router)
 
@@ -42,6 +43,11 @@ export default new Router({
       path: '/verify/:id',
       name: 'VerifyEmail',
       component: VerifyEmail
+    },
+    {
+      path: '/user/appointments',
+      name: 'Bookings',
+      component: Bookings
     }
   ]
 })
