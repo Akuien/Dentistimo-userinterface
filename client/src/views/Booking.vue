@@ -8,6 +8,10 @@
           {{  notify }}
       </b-alert>
 
+       <b-alert v-model="showDismissibleAlert2" variant="danger" dismissible>
+          {{  notify2 }}
+      </b-alert>
+
         <div class="form-group">
         <b-form-group for="timepicker-valid">Choose a date
       <b-form-datepicker v-model="form.day" locale="en"></b-form-datepicker></b-form-group>
@@ -30,7 +34,9 @@ export default {
   data() {
     return {
       notify: '',
+      notify2: '',
       showDismissibleAlert: false,
+      showDismissibleAlert2: false,
       currentDentist: [],
       numberOfDentists: 0,
       form: {
@@ -58,7 +64,7 @@ export default {
         this.currentDentist = response
         this.numberOfDentists = this.currentDentist.numberOfDentists
         console.log(this.currentDentist)
-        console.log(this.currentDentist.numberOfDentists)
+        // console.log(this.currentDentist.numberOfDentists)
         console.log(this.numberOfDentists)
       }
     })
@@ -83,9 +89,13 @@ export default {
         if (topic === 'ui/approved') {
           this.notify = 'Your have booked a new appointment!'
           this.showDismissibleAlert = true
-
+          this.showDismissibleAlert2 = false
           const response = JSON.parse(message)
           console.log(response)
+        } else {
+          this.showDismissibleAlert = false
+          this.showDismissibleAlert2 = true
+          this.notify2 = 'Your booking was unsucsessful!!'
         }
       })
     }
