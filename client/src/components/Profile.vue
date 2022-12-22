@@ -46,6 +46,10 @@
         </div>
         <div class="container">
           <br/><br/><br/><br/>
+           <p>
+          <router-link :to="'/userAppointments/' + this.$store.state.id"
+            >appointments</router-link>
+        </p>
           <b-button id="buttons">Update your information <img id="icon" src="https://cdn-icons-png.flaticon.com/512/2280/2280532.png" alt= "pen"></b-button>
           <br/><br/>
           <b-button id="buttons">Delete your account <img id="icon" src="https://cdn-icons-png.flaticon.com/512/5073/5073837.png" alt= "trash"></b-button>
