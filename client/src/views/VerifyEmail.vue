@@ -63,7 +63,6 @@
 </template>
 
 <script>
-import { Api } from '@/Api'
 export default {
   name: 'VerifyEmail',
   mounted: function () {
@@ -71,13 +70,13 @@ export default {
   },
   methods: {
     verifyAccount() {
-      Api.get(`/verify/${this.$route.params.id}`)
-        .then(response => {
-          console.log(`${this.$route.params.id}`)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+      this.$client.on('connect', () => {
+        console.log('Connected!')
+      })
+      const verifyUser = { user_id: this.$route.params.id }
+      const updateUser = JSON.stringify(verifyUser)
+      this.$client.publish('Users/verify', updateUser)
+      console.log(verifyUser)
     }
   }
 }
