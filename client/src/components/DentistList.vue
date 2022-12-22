@@ -20,7 +20,7 @@
         fridayday: {{ dentist.openinghours.friday }}<br />
         <br />
         <p>
-          <router-link :to="'/calender/' + dentist._id"
+          <router-link :to="'/calender/' + dentist.id"
             >Make an appointment</router-link>
         </p>
         <p>

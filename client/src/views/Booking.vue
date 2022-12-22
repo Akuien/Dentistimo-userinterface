@@ -45,7 +45,6 @@ export default {
         console.log(error)
       }
     })
-
     this.$client.on('message', (topic, payload) => {
       console.log(topic, payload.toString())
       if (topic === 'ui/get-dental-clinic') {
@@ -58,7 +57,6 @@ export default {
         this.currentDentist = response
         this.numberOfDentists = response.dentists
         this.openingHours = response.openinghours
-
         console.log(this.currentDentist)
       }
     })
