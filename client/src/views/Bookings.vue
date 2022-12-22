@@ -3,19 +3,14 @@
       <div>
         <Navbar />
         <div class="container">
-             <p v-if="appointments.length">There are no posts yet.</p>
           <h2 class="p-3 text-center">USER APPOINTMENT</h2>
           <b-container class="listitem"
          v-for="appointment in appointments"
         v-bind:key="appointment._id">
-            <p><b-col>daay: {{ appointments.requestid  }}</b-col></p>
-            <b-col>day: {{ appointments.day }}</b-col>
-            <b-col> date: {{ appointment.day }}</b-col>
-            <b-col> start: {{ appointment.date }}</b-col>
-
-          <h1>booking for {{appointments.requestid }}</h1>
-          <h1>booking  2: {{appointments.appointmentsArray.day}}</h1>
-          <h1>booking {{appointments.appointmentsArray}}</h1>
+            <p><b-col>dentist id: {{ appointment.dentist  }}</b-col></p>
+            <b-col>day: {{ appointment.day }}</b-col>
+            <b-col> date: {{ appointment.date }}</b-col>
+            <b-col> start: {{ appointment.start }}</b-col>
           </b-container>
         </div>
       </div>
@@ -25,11 +20,10 @@
 <script>
 import Navbar from '../components/Navbar.vue'
 export default {
-  props: ['appointment'],
   components: { Navbar },
   data() {
     return {
-      appointments: []
+      appointments: undefined
     }
   },
   mounted() {
@@ -38,26 +32,21 @@ export default {
   methods: {
     getUserAppointments() {
       this.$client.subscribe('ui/userAppointmentsFound')
-      const userIdForApp = {
+      const userIdForAppointments = {
         user: this.$store.state.id,
         requestid: Math.floor(Math.random() * 29805688)
       }
 
-      const newRewquest = JSON.stringify(userIdForApp)
+      const newRewquest = JSON.stringify(userIdForAppointments)
       this.$client.publish('availability/getuserappointments', newRewquest)
       console.log('step 1')
 
       this.$client.on('message', (topic, payload) => {
-        console.log(topic, payload.toString())
+        // console.log(topic, payload.toString())
         if (topic === 'ui/userAppointmentsFound') {
           const response = JSON.parse(payload)
-          console.log('appointments: ', response)
-
+          // console.log('appointments: ', response)
           this.appointments = response
-          this.requestid = this.appointments.requestid
-          console.log('hiee' + this.appointments)
-          console.log('hiee again' + this.appointments.requestid)
-          console.log('hiee again' + this.appointments.appointmentsArray)
         }
       })
     }
