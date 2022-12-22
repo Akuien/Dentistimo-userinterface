@@ -38,6 +38,7 @@ export default {
       showDismissibleAlert2: false,
       currentDentist: [],
       numberOfDentists: 0,
+      email: '',
       form: {
         date: '',
         start: ''
@@ -62,7 +63,7 @@ export default {
 
         this.currentDentist = response
         this.numberOfDentists = this.currentDentist.numberOfDentists
-        console.log(this.currentDentist)
+        // console.log(this.currentDentist)
         // console.log(this.currentDentist.numberOfDentists)
         console.log(this.numberOfDentists)
       }
@@ -73,7 +74,7 @@ export default {
       const weekday = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
       const dayOfWeek = new Date(this.form.date)
       const theDay = dayOfWeek.getDay()
-
+      console.log('this is the email : ' + this.$store.state.email)
       const bookingInfo = {
         user: this.$store.state.id,
         day: weekday[theDay],
@@ -81,7 +82,8 @@ export default {
         start: this.form.start,
         dentist: `${this.$route.params.id}`,
         issuance: uuid.v4(),
-        numberOfDentists: this.numberOfDentists
+        numberOfDentists: this.numberOfDentists,
+        email: this.$store.state.email
       }
       this.$client.subscribe('ui/approved')
       this.$client.subscribe('ui/notapproved')
