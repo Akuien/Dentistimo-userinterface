@@ -47,7 +47,7 @@ export default {
   },
   mounted() {
     this.$client.subscribe('ui/dentist/getdentistbyId')
-    this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
+    this.$client.publish('dentist/getdentistbyId', 'The ui component wants this for booking 1 ' + `${this.$route.params.id}` + ' dentist!!')
     this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
       if (error) {
         console.log(error)
@@ -63,8 +63,8 @@ export default {
 
         this.currentDentist = response
         this.numberOfDentists = this.currentDentist.numberOfDentists
-        // console.log(this.currentDentist)
-        // console.log(this.currentDentist.numberOfDentists)
+        console.log(this.currentDentist)
+        console.log(this.currentDentist.numberOfDentists)
         console.log(this.numberOfDentists)
       }
     })
@@ -75,6 +75,7 @@ export default {
       const dayOfWeek = new Date(this.form.date)
       const theDay = dayOfWeek.getDay()
       console.log('this is the email : ' + this.$store.state.email)
+      console.log('this is the numberOfDentists : ' + this.currentDentist.numberOfDentists)
       const bookingInfo = {
         user: this.$store.state.id,
         day: weekday[theDay],

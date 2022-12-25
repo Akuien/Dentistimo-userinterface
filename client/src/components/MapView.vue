@@ -48,13 +48,12 @@ export default {
     this.$client.on('connect', () => {
       // console.log('Connected!')
     })
-    this.$client.subscribe('dentist/getAllDentists')
-    this.$client.publish('my/test/topic99', 'Hello, I am dentist and ironically toothless')
-    this.$client.publish('dentists', 'The ui component wants dentists list!!')
+    this.$client.subscribe('ui/dentist/getAllDentists')
+    this.$client.publish('dentist/getAllDentists', 'The ui component wants dentists list to display on the map!!')
 
     this.$client.on('message', (topic, payload) => {
       console.log(topic, payload.toString())
-      if (topic === 'dentist/getAllDentists') {
+      if (topic === 'ui/dentist/getAllDentists') {
         const response = JSON.parse(payload)
         this.dentists = response.map(response => {
           response.iconSize = [40, 40]

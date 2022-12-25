@@ -44,7 +44,7 @@ export default {
       dentistid: 0
     }
   },
-  mounted() {
+  /* mounted() {
     this.$client.subscribe('ui/dentist/getdentistbyId')
     this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
     this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
@@ -67,7 +67,7 @@ export default {
         console.log(this.currentDentist.id)
       }
     })
-  },
+  }, */
   methods: {
     mouseOver(index) {
       this.$emit('mouse-over-dentist', index)
