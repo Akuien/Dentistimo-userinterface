@@ -94,7 +94,7 @@ export default {
     },
     getDentist() {
       this.$client.subscribe('ui/dentist/getdentistbyId')
-      this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
+      this.$client.publish('dentist/getdentistbyId', 'The ui component wants this for timeslots  ' + `${this.$route.params.id}` + ' dentist!!')
       this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
         if (error) {
           console.log(error)
@@ -110,7 +110,7 @@ export default {
     },
     showTimeslots(date) {
       this.$client.subscribe('ui/dentist/getdentistbyId')
-      this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
+      this.$client.publish('dentist/getdentistbyId', 'The ui component wants this for timeslots  ' + `${this.$route.params.id}` + ' dentist!!')
       this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
         if (error) {
           console.log(error)
@@ -136,7 +136,11 @@ export default {
         // console.log('checking date ' + this.dateValue)
         // console.log('checking day:::' + weekday[theDay])
         const newRewquest = JSON.stringify(denID)
-        this.$client.publish('dentist/getTimeslots', newRewquest)
+        this.$client.publish('dentist/getTimeslots', newRewquest, 1, (error) => {
+          if (error) {
+            console.log(error)
+          }
+        })
 
         this.$client.on('message', (topic, payload) => {
           if (topic === 'ui/dentistTimeSlotsFound') {
