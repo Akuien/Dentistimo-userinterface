@@ -55,7 +55,7 @@
     <p v-if="warning" class="text-danger" size="lg">
       Please choose within opening hours </p>
     </div>
-    <b-button outline variant="light" v-on:click="checkAvailability()"  type="button" id="check-availability-button">
+    <b-button outline variant="light" v-on:click="checkAvailability()"  :disabled="disableButton"  type="button" id="check-availability-button">
              Done
             <div v-if="availability === true">
             The requested appointment time is available
@@ -129,12 +129,16 @@ export default {
       const openingHoursThisDay = Object.values(this.currentDentist.openinghours)[
         getDay - 1]
       this.dayPicked = openingthisDay
-      this.dayPickedOhours = openingHoursThisDay
+      this.chosenDayOpeningHours = openingHoursThisDay
       this.disableButton = true
     },
     chosenSlot: function () {
-      const openingHour = this.dayPickedOhours.substring(0, this.dayPickedOhours.indexOf(':'))
-      const closingH1 = this.dayPickedOhours.substring(this.dayPickedOhours.indexOf('-'))
+      const openingHour = this.chosenDayOpeningHours.substring(
+        0, this.chosenDayOpeningHours.indexOf(':')
+      )
+      const closingH1 = this.chosenDayOpeningHours.substring(
+        this.chosenDayOpeningHours.indexOf('-') + 1
+      )
       const closingH2 = closingH1.substring(0, closingH1.indexOf(':'))
       const timeChosen = this.chosenSlot
       const stInt = parseInt(openingHour)
@@ -142,7 +146,9 @@ export default {
       const chosenTime = parseInt(timeChosen)
       if (chosenTime >= stInt && chosenTime < clInt) {
         this.warning = false
+        this.disableButton = false
       } else {
+        this.warning = true
         this.warning = true
       }
     }
