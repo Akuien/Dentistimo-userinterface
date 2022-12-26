@@ -1,7 +1,7 @@
 <template>
     <body>
       <div>
-        <Navbar />
+
         <div class="container">
           <h2 class="p-3 text-center">USER APPOINTMENT</h2>
           <b-container class="listitem"
@@ -18,9 +18,9 @@
   </template>
 
 <script>
-import Navbar from '../components/Navbar.vue'
+
 export default {
-  components: { Navbar },
+  components: { },
   data() {
     return {
       appointments: undefined

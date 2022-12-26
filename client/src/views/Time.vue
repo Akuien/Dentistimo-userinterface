@@ -11,12 +11,12 @@
           selected-variant="success"
           today-variant="info"
           nav-button-variant="info"
-          v-model="dateValue"
+          v-model="date"
           :date-disabled-fn="dateDisabled"
           :min="min"
           :max="max"
           locale="en-US"
-          @selected="showTimeslots(dateValue)">
+          @selected="showTimeslots(date)">
         </b-calendar>
       </b-col>
     </b-row>
@@ -34,15 +34,23 @@
         v-for="time in times"
         :key="time._id"
         :value="value">
-        <b-form-select v-model="timeSlots">
+        <b-form-select v-model="selectedTime">
   <b-form-select-option  v-for="(slot, index) in time.timeSlots" :key="index" :value="value">  {{ index }} - {{ slot }}
   </b-form-select-option>
 </b-form-select>
+<div class="mt-3">Selected: <strong>{{ selectedTime }}</strong></div>
       </div>
 
-    <!-- <div class="mt-3">Selected: <strong>{{ selectedItem }}</strong></div> -->
-          </b-container>
-          <b-button outline variant="light" class="btnBook" > Book now </b-button>
+  </b-container>
+          <b-button outline variant="light" v-on:click="checkAvailability()" type="button" id="check-availability-button">
+             Check availability
+            <div v-if="availability === true">
+            The requested appointment time is available
+           </div>
+          <div v-else-if="availability === false">
+           The requested appointment time
+         </div>
+        </b-button>
    <!--  <b-alert v-model="showDismissibleAlert" variant="danger" dismissible>
         Dismissible Alert!
       </b-alert> -->
@@ -64,11 +72,13 @@ export default {
     return {
       showAlert: false,
       fail: '',
-      selectedItem: null,
+      selectedTime: '',
       timeSlots: [],
-      dateValue: '',
+      date: '',
+      time: '',
       value: '',
       day: '',
+      availability: null,
       min: minDate,
       max: maxDate,
       monday: 1,
@@ -83,7 +93,7 @@ export default {
     }
   },
   mounted() {
-    this.getDentist()
+
   },
   methods: {
     dateDisabled(ymd, date) {
@@ -92,22 +102,7 @@ export default {
       // Return `true` if the date should be disabled
       return weekday === 0 || weekday === 6
     },
-    getDentist() {
-      this.$client.subscribe('ui/dentist/getdentistbyId')
-      this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
-      this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
-        if (error) {
-          console.log(error)
-        }
-      })
-      this.$client.on('message', (topic, payload) => {
-        if (topic === 'ui/dentist/getdentistbyId') {
-          const response = JSON.parse(payload)
-          this.currentDentist = response
-          this.id = this.currentDentist.id
-        }
-      })
-    },
+
     showTimeslots(date) {
       this.$client.subscribe('ui/dentist/getdentistbyId')
       this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
@@ -123,17 +118,17 @@ export default {
           this.id = this.currentDentist.id
         }
         const weekday = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-        const dayOfWeek = new Date(this.dateValue)
+        const dayOfWeek = new Date(this.date)
         const theDay = dayOfWeek.getDay()
 
         this.$client.subscribe('ui/dentistTimeSlotsFound')
         const denID = {
           id: this.currentDentist.id,
           day: weekday[theDay],
-          date: this.dateValue,
+          date: this.date,
           requestid: Math.floor(Math.random() * 29805688)
         }
-        // console.log('checking date ' + this.dateValue)
+        // console.log('checking date ' + this.date)
         // console.log('checking day:::' + weekday[theDay])
         const newRewquest = JSON.stringify(denID)
         this.$client.publish('dentist/getTimeslots', newRewquest)
@@ -145,6 +140,24 @@ export default {
           }
         })
       })
+    },
+    checkAvailability() {
+      // Send a message to the backend requesting the availability of time
+      this.$client.on('connect', () => {
+        console.log('Connected!!')
+        this.$client.publish('appointment/request', JSON.stringify({ date: this.date, time: this.selectedTime }))
+      })
+
+      this.$client.on('message', (topic, message) => {
+        if (topic === 'appointment/response') {
+          const availability = JSON.parse(message).available
+          if (availability) {
+            console.log('The requested appointment time is available')
+          } else {
+            console.log('The requested appointment time is not available')
+          }
+        }
+      })
     }
   }
 }
@@ -152,27 +165,32 @@ export default {
 
 <style>
 .header {
-color: #308aa0aa;;
+color: #309aa0ca;;
 margin: 20px;
 font-weight: bold;
 
 }
 .container {
   margin-top: 40px;
-  background-color: #85e5fd62;
+  background-color: #41bdcb7c;
   border-radius: 10px;
   margin-bottom: 50px;
 }
 .header-2 {
-color: #308aa0aa;
+color: #309aa0e3;
 padding: 5px;
 margin: 30px;
 border: 2px solid #4a9aae77;
   border-radius: 10px;
 }
-.btnBook {
+#check-availability-button {
+background-color: #42cdb6;
 margin: 50px;
-color: #45b5d5;
+font-size: 20px;
+font-weight: bolder;
+color: #ffffff;
+border: 2px solid #4a9aae77;
+border-radius: 10px;
 width: 20em;
 
 }

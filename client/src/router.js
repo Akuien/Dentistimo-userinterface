@@ -7,6 +7,7 @@ import VerifyEmail from './views/VerifyEmail.vue'
 import Booking from './views/Booking.vue'
 import Bookings from './views/Bookings.vue'
 import Time from './views/Time.vue'
+import Timeslot from './views/Timeslots.vue'
 
 Vue.use(Router)
 
@@ -39,6 +40,11 @@ export default new Router({
       path: '/time/:id',
       name: 'Time',
       component: Time
+    },
+    {
+      path: '/dentist/:dentistid/timeslots',
+      name: 'Timeslot',
+      component: Timeslot
     },
     {
       path: '/verify/:id',
