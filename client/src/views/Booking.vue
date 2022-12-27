@@ -11,11 +11,22 @@
        <b-alert v-model="showDismissibleAlert2" variant="danger" dismissible>
           {{  notify2 }}
       </b-alert>
-
-        <div class="form-group">
-        <b-form-group for="timepicker-valid">Choose a date
-      <b-form-datepicker v-model="form.date" locale="en"></b-form-datepicker></b-form-group>
-       </div>
+       <b-row no-gutters>
+      <b-col cols="12">
+        <b-calendar
+          class="calendar"
+          block
+          selected-variant="success"
+          today-variant="info"
+          nav-button-variant="info"
+          v-model="dateValue"
+          :date-disabled-fn="dateDisabled"
+          :min="min"
+          :max="max"
+          locale="en-US">
+        </b-calendar>
+      </b-col>
+    </b-row>
        <div class="form-group">
          <b-form-group for="timepicker-valid">Choose a time
     <b-form-timepicker id="datepicker-valid" :state="true" v-model="form.start"></b-form-timepicker></b-form-group>
@@ -31,7 +42,25 @@ import { uuid } from 'vue-uuid'
 export default {
   name: 'booking',
   data() {
+    const now = new Date()
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    const minDate = new Date(today)
+    minDate.setMonth(today.getMonth())
+    minDate.setDate(today.getDate())
+    const maxDate = new Date(today)
+    maxDate.setMonth(today.getMonth() + 2)
+    maxDate.setDate(today.getDate())
     return {
+      dateValue: '',
+      value: '',
+      day: '',
+      min: minDate,
+      max: maxDate,
+      monday: 1,
+      tuesday: 2,
+      wednesday: 3,
+      thursday: 4,
+      friday: 5,
       notify: '',
       notify2: '',
       showDismissibleAlert: false,
@@ -76,15 +105,21 @@ export default {
     })
   },
   methods: {
+    dateDisabled(ymd, date) {
+    // Disable weekends (Sunday = `0`, Saturday = `6`)
+      const weekday = date.getDay()
+      // Return `true` if the date should be disabled
+      return weekday === 0 || weekday === 6
+    },
     handleSubmit() {
       const weekday = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-      const dayOfWeek = new Date(this.form.date)
+      const dayOfWeek = new Date(this.dateValue)
       const theDay = dayOfWeek.getDay()
       console.log('this is the email : ' + this.$store.state.email)
       const bookingInfo = {
         user: this.$store.state.id,
         day: weekday[theDay],
-        date: this.form.date,
+        date: this.dateValue,
         start: this.form.start,
         dentist: `${this.$route.params.id}`,
         issuance: uuid.v4(),
