@@ -145,6 +145,7 @@ export default {
       // Send a message to the backend requesting the availability of time
       this.$client.on('connect', () => {
         console.log('Connected!!')
+        this.$client.subscribe('appointment/response', 'subscribed to appointment response')
         this.$client.publish('appointment/request', JSON.stringify({ date: this.date, time: this.selectedTime }))
       })
 

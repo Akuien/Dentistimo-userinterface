@@ -52,18 +52,18 @@
 </b-form>
 </div>
     <div>
-    <p v-if="warning" class="text-danger" size="lg">
+    <p v-if="warning" class="warning-text" size="lg">
       Please choose within opening hours </p>
     </div>
-    <b-button outline variant="light" v-on:click="checkAvailability()"  :disabled="disableButton"  type="button" id="check-availability-button">
+    <b-button outline variant="light" v-on:click="checkAvailability()"  :disabled="disableBtn"  type="button" id="check-availability-button">
              Done
+            </b-button>
             <div v-if="availability === true">
-            The requested appointment time is available
+          The requested appointment time is available
            </div>
           <div v-else-if="availability === false">
-           The requested appointment time
+          The requested appointment time is not available
          </div>
-        </b-button>
 
 </b-container>
 
@@ -114,7 +114,7 @@ export default {
       chosenDayOpeningHours: '',
       thisDay: 9,
       chosenSlot: '',
-      disableButton: true,
+      disableBtn: true,
       warning: false
     }
   },
@@ -126,10 +126,10 @@ export default {
       this.thisDay = getDay
       const openingthisDay = Object.keys(this.currentDentist.openinghours)[
         getDay - 1]
-      const openingHoursThisDay = Object.values(this.currentDentist.openinghours)[
+      const openingHThisDay = Object.values(this.currentDentist.openinghours)[
         getDay - 1]
       this.dayPicked = openingthisDay
-      this.chosenDayOpeningHours = openingHoursThisDay
+      this.chosenDayOpeningHours = openingHThisDay
       this.disableButton = true
     },
     chosenSlot: function () {
@@ -146,10 +146,10 @@ export default {
       const chosenTime = parseInt(timeChosen)
       if (chosenTime >= stInt && chosenTime < clInt) {
         this.warning = false
-        this.disableButton = false
+        this.disableBtn = false
       } else {
         this.warning = true
-        this.warning = true
+        this.disableBtn = true
       }
     }
   },
@@ -163,7 +163,8 @@ export default {
     checkAvailability() {
       this.$client.on('connect', () => {
         console.log('Connected!!')
-        this.$client.publish('appointment/request', JSON.stringify({ date: this.date, time: this.selectedTime }))
+        this.$client.subscribe('appointment/response', 'subscribed to appointment response')
+        this.$client.publish('appointment/request', JSON.stringify({ date: this.value, time: this.selectedTime }))
       })
 
       this.$client.on('message', (topic, message) => {
@@ -230,6 +231,11 @@ color: #309aa0ca;;
 margin: 20px;
 font-weight: bold;
 
+}
+.warning-text{
+font-size: 20px;
+font-weight: bolder;
+color: red
 }
 .container {
   margin-top: 40px;
