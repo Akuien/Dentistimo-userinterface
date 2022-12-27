@@ -7,6 +7,7 @@ import VerifyEmail from './views/VerifyEmail.vue'
 import Booking from './views/Booking.vue'
 import Bookings from './views/Bookings.vue'
 import Time from './views/Time.vue'
+import Dentist from './views/Dentist.vue'
 
 Vue.use(Router)
 
@@ -29,7 +30,6 @@ export default new Router({
       name: 'login',
       component: logIn
     },
-
     {
       path: '/booking/:id',
       name: 'Booking',
@@ -49,7 +49,11 @@ export default new Router({
       path: '/userAppointments/:id',
       name: 'Bookings',
       component: Bookings
+    },
+    {
+      path: '/dentist/:id',
+      name: 'Dentist',
+      component: Dentist
     }
-
   ]
 })

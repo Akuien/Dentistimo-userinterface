@@ -37,6 +37,11 @@ export default {
       showDismissibleAlert: false,
       showDismissibleAlert2: false,
       currentDentist: [],
+      publish: {
+        topic: 'dentist/getdentistbyId',
+        qos: 2,
+        payload: `${this.$route.params.id}`
+      },
       numberOfDentists: 0,
       email: '',
       form: {
@@ -46,9 +51,10 @@ export default {
     }
   },
   mounted() {
+    const { topic, qos, payload } = this.publish
     this.$client.subscribe('ui/dentist/getdentistbyId')
     this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
-    this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
+    this.$client.publish(topic, payload, qos, (error) => {
       if (error) {
         console.log(error)
       }
@@ -57,7 +63,7 @@ export default {
     this.$client.on('message', (topic, payload) => {
       console.log(topic, payload.toString())
       if (topic === 'ui/dentist/getdentistbyId') {
-        console.log('Dentist RECEIVED!!!!')
+        // console.log('Dentist RECEIVED!!!!')
         const response = JSON.parse(payload)
         console.log('Dentist: ', response)
 
