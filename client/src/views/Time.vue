@@ -38,6 +38,11 @@
   <b-form-select-option  v-for="(slot, index) in time.timeSlots" :key="index" :value="value">  {{ index }} - {{ slot }}
   </b-form-select-option>
 </b-form-select>
+
+<b-form-group label="Available slots" v-slot="{ ariaDescribedby }" v-model="timeSlots">
+      <b-form-radio v-model="timeSlots" :aria-describedby="ariaDescribedby" name="some-radios" v-for="(slot, index) in time.timeSlots" :key="index" :value="value">{{ slot }}</b-form-radio>
+    </b-form-group>
+    <div class="mt-3">Selected: <strong>{{ timeSlots }}</strong></div>
       </div>
 
     <!-- <div class="mt-3">Selected: <strong>{{ selectedItem }}</strong></div> -->
@@ -65,7 +70,8 @@ export default {
       showAlert: false,
       fail: '',
       selectedItem: null,
-      timeSlots: [],
+      timeSlots: '',
+      slotsm: '',
       dateValue: '',
       value: '',
       day: '',
@@ -93,15 +99,15 @@ export default {
       return weekday === 0 || weekday === 6
     },
     getDentist() {
-      this.$client.subscribe('ui/dentist/getdentistbyId')
-      this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
+      this.$client.subscribe('ui/get-dental-clinic')
+      // this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
       this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
         if (error) {
           console.log(error)
         }
       })
       this.$client.on('message', (topic, payload) => {
-        if (topic === 'ui/dentist/getdentistbyId') {
+        if (topic === 'ui/get-dental-clinic') {
           const response = JSON.parse(payload)
           this.currentDentist = response
           this.id = this.currentDentist.id
@@ -109,15 +115,15 @@ export default {
       })
     },
     showTimeslots(date) {
-      this.$client.subscribe('ui/dentist/getdentistbyId')
-      this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
-      this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 0, (error) => {
+      this.$client.subscribe('ui/get-dental-clinic')
+      // this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
+      this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
         if (error) {
           console.log(error)
         }
       })
       this.$client.on('message', (topic, payload) => {
-        if (topic === 'ui/dentist/getdentistbyId') {
+        if (topic === 'ui/get-dental-clinic') {
           const response = JSON.parse(payload)
           this.currentDentist = response
           this.id = this.currentDentist.id
