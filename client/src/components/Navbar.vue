@@ -1,34 +1,47 @@
 <template>
-    <div>
-      <b-button v-b-toggle.sidebar-no-header variant="clear" size="sm" style="float:right" id="sidebar-btn">  <img src="../assets/icons8-sidebar-30.png" alt="">  <b-col md="6" class="mb-3">
-    </b-col> </b-button>
-      <b-sidebar id="sidebar-no-header" aria-labelledby="sidebar-no-header-title" no-header shadow>
-        <template #default="{ hide }">
-          <div class="p-3">
-            <h4 id="sidebar-no-header-title"> <a class="navbar-brand" href="/">
-      <div class="logo-image">
-            <img src="../assets/default.png" class="img-fluid">
-      </div>
-</a></h4>
-            <nav class="mb-3">
-              <b-nav vertical>
-                <b-nav-item active @click="hide">Update Account</b-nav-item>
-                <b-nav-item href="#link-1" @click="hide"> View Appointment Info</b-nav-item>
-                <b-nav-item href="#link-2" @click="hide">Cancel Appointment</b-nav-item>
-                <b-nav-item href="#link-3" @click="hide">Logout</b-nav-item>
-              </b-nav>
-            </nav>
-            <b-button variant="info" block @click="hide">Close</b-button>
-          </div>
-        </template>
-      </b-sidebar>
+    <div id="app">
+    <b-navbar-nav class="navbar">
+      <b-navbar-brand href="/"> Dentistimo
+      <img src="../assets/tooth 17.59.57.png">
+    </b-navbar-brand>
+      <b-navbar type="light" >
+      <b-nav-item href="/" icon="">Home</b-nav-item>
+      <b-nav-item href="/userinformation" icon="">Profile</b-nav-item>
+      <b-nav-item href="/Login" icon="">Login</b-nav-item>
+    </b-navbar>
+  </b-navbar-nav>
     </div>
   </template>
 
+<script>
+
+export default {
+}
+</script>
+
 <style>
 
+.navbar-nav {
+  height: 65px;
+  font-weight: bold;
+  margin: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+.nav-item  {
+  font-size:23px;
+  margin: 3px;
+  margin-top: -0.5em;
+  padding-bottom: 0.5px;
+  background-color: white;
+  padding: 0.01rem 2rem;
+  font-weight: bold;
+  color: black;
+}
+
 a:link, a:visited {
-  font-size: 1.5em;
   font-family:Arial, Helvetica, sans-serif;
   border-radius: 8px;
   padding: 2px 6px;
@@ -40,11 +53,14 @@ a:link, a:visited {
 }
 
 a:hover, a:active {
-background-color: #CFF8F8  ;
+  background-color: #6df2f953;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+
 }
-
-#sidebar-btn {
+.navbar-nav .icon-container {
+  float: left;
 
 }
-
 </style>

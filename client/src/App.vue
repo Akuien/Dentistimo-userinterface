@@ -1,17 +1,15 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link>
-      <router-link to="/userinformation">Profile</router-link>
-      <router-link to="/Login">Login</router-link>
-    </div>
+<Navbar> </Navbar>
     <!-- Render the content of the current page view -->
     <router-view/>
   </div>
 </template>
-<script>
 
+<script>
+import Navbar from './components/Navbar.vue'
 export default {
+  components: { Navbar }
 }
 </script>
 
@@ -23,4 +21,5 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
 </style>
