@@ -1,9 +1,8 @@
 <template>
   <div>
     <div id="profile"> Edit Profile <img id="tooth" src="https://cdn-icons-png.flaticon.com/512/3143/3143588.png" alt= "tooth"></div>
-      <b-container>
         <b-form>
-          <div class="container py-5 h-100">
+          <div class="container py-5 h-100" style= "background-color: #7DCDBF">
             <div class="row d-flex justify-content-center align-items-center h-100">
               <div class="col-lg-6">
                 <div id= "card">
@@ -36,16 +35,13 @@
                         </b-form-input>
                         <br/>
                         </b-form-group>
-
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <br/>
           <b-button @click="updateUser()" id="buttons">  Submit  </b-button>
         </b-form>
-      </b-container>
   </div>
 </template>
 

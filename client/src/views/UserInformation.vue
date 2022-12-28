@@ -5,9 +5,8 @@
   <div v-if="Profile">
     <profile> </profile>
         <div>
-          <br/>
           <b-button id="button" v-on:click="handleToggle(false)">Update your information <img id="icon" src="https://cdn-icons-png.flaticon.com/512/2280/2280532.png" alt= "pen"></b-button>
-          <br/><br/><br/><br/><br/>
+          <br/><br/>
         </div>
   </div>
   <div v-else>
@@ -15,7 +14,6 @@
       <div>
         <br/>
         <b-button id="buttons" style="background-color: #ab1a1ae4" v-on:click="handleToggle(true)">Cancel</b-button>
-        <br/><br/><br/>
       </div>
   </div>
 </div>
@@ -44,15 +42,19 @@ export default {
 
 <style>
   .page{
-    background-color:#7dcdc0;
+    background-color:#7DCDBF;
   }
   #button{
     background-color: #3D5332;
+    position: relative;
+    bottom: 5rem;
   }
   #buttons{
+    position: relative;
     height: 3rem;
     width: 6rem;
     background-color: #3D5332;
+    bottom: 4rem;
   }
   #icon{
     position: relative;
