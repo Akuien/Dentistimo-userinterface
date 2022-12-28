@@ -46,7 +46,7 @@ export default {
   mounted() {
     this.$refs.modal.show()
     this.$client.on('connect', () => {
-      console.log('Connected!')
+      // console.log('Connected!')
     })
     this.$client.subscribe('dentist/getAllDentists')
     this.$client.publish('my/test/topic99', 'Hello, I am dentist and ironically toothless')
@@ -61,7 +61,7 @@ export default {
           return response
         })
       }
-      console.log(this.dentists)
+      // console.log(this.dentists)
     })
   },
   methods: {

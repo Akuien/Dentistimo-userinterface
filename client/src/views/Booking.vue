@@ -8,11 +8,14 @@
           {{  notify }}
       </b-alert>
 
+       <b-alert v-model="showDismissibleAlert2" variant="danger" dismissible>
+          {{  notify2 }}
+      </b-alert>
+
         <div class="form-group">
         <b-form-group for="timepicker-valid">Choose a date
-      <b-form-datepicker v-model="form.day" locale="en"></b-form-datepicker></b-form-group>
+      <b-form-datepicker v-model="form.date" locale="en"></b-form-datepicker></b-form-group>
        </div>
-
        <div class="form-group">
          <b-form-group for="timepicker-valid">Choose a time
     <b-form-timepicker id="datepicker-valid" :state="true" v-model="form.start"></b-form-timepicker></b-form-group>
@@ -30,18 +33,21 @@ export default {
   data() {
     return {
       notify: '',
+      notify2: '',
       showDismissibleAlert: false,
+      showDismissibleAlert2: false,
       currentDentist: [],
       numberOfDentists: 0,
+      email: '',
       form: {
-        day: '',
+        date: '',
         start: ''
       }
     }
   },
   mounted() {
     this.$client.subscribe('ui/dentist/getdentistbyId')
-    this.$client.publish('dentists', 'The ui component wants this ' + `${this.$route.params.id}` + ' dentist!!')
+    this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
     this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
       if (error) {
         console.log(error)
@@ -57,23 +63,31 @@ export default {
 
         this.currentDentist = response
         this.numberOfDentists = this.currentDentist.numberOfDentists
-        console.log(this.currentDentist)
-        console.log(this.currentDentist.numberOfDentists)
+        // console.log(this.currentDentist)
+        // console.log(this.currentDentist.numberOfDentists)
         console.log(this.numberOfDentists)
       }
     })
   },
   methods: {
     handleSubmit() {
+      const weekday = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+      const dayOfWeek = new Date(this.form.date)
+      const theDay = dayOfWeek.getDay()
+      console.log('this is the email : ' + this.$store.state.email)
       const bookingInfo = {
         user: this.$store.state.id,
-        day: this.form.day,
+        day: weekday[theDay],
+        date: this.form.date,
         start: this.form.start,
         dentist: `${this.$route.params.id}`,
         issuance: uuid.v4(),
-        numberOfDentists: this.numberOfDentists
+        numberOfDentists: this.numberOfDentists,
+        email: this.$store.state.email
       }
       this.$client.subscribe('ui/approved')
+      this.$client.subscribe('ui/notapproved')
+
       const newRewquest = JSON.stringify(bookingInfo)
       this.$client.publish('BookingInfo/test', newRewquest)
       console.log('testing')
@@ -83,9 +97,13 @@ export default {
         if (topic === 'ui/approved') {
           this.notify = 'Your have booked a new appointment!'
           this.showDismissibleAlert = true
-
+          this.showDismissibleAlert2 = false
           const response = JSON.parse(message)
           console.log(response)
+        } else if (topic === 'ui/notapproved') {
+          this.showDismissibleAlert = false
+          this.showDismissibleAlert2 = true
+          this.notify2 = 'Your booking was unsucsessful!!'
         }
       })
     }

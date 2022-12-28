@@ -19,9 +19,10 @@
         thursday: {{ dentist.openinghours.thursday }}<br />
         fridayday: {{ dentist.openinghours.friday }}<br />
         <br />
-        <p>
-          <router-link :to="'/calender/' + dentist._id"
-            >only calender and timeslots to test not for booking</router-link>
+
+         <p>
+          <router-link :to="'/time/' + dentist._id"
+            >timeslots</router-link>
         </p>
         <p>
           <router-link :to="'/booking/' + dentist._id"
@@ -36,6 +37,36 @@ export default {
   name: 'DentistList',
   props: {
     dentists: Array
+  },
+  data() {
+    return {
+      currentDentist: [],
+      dentistid: 0
+    }
+  },
+  mounted() {
+    this.$client.subscribe('ui/dentist/getdentistbyId')
+    this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
+    this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
+      if (error) {
+        console.log(error)
+      }
+    })
+
+    this.$client.on('message', (topic, payload) => {
+      // console.log(topic, payload.toString())
+      if (topic === 'ui/dentist/getdentistbyId') {
+        console.log('Dentist RECEIVED!!!!')
+        const response = JSON.parse(payload)
+        console.log('Dentist: ', response)
+
+        this.currentDentist = response
+        this.dentistid = this.currentDentist.id
+        console.log(this.currentDentist)
+        // console.log(this.currentDentist.numberOfDentists)
+        console.log(this.currentDentist.id)
+      }
+    })
   },
   methods: {
     mouseOver(index) {
