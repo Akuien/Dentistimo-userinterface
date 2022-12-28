@@ -44,8 +44,6 @@
     </b-form-group>
     <div class="mt-3">Selected: <strong>{{ timeSlots }}</strong></div>
       </div>
-
-    <!-- <div class="mt-3">Selected: <strong>{{ selectedItem }}</strong></div> -->
           </b-container>
           <b-button outline variant="light" class="btnBook" > Book now </b-button>
    <!--  <b-alert v-model="showDismissibleAlert" variant="danger" dismissible>
