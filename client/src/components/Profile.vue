@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="profile"> Profile <img id="tooth" src="https://cdn-icons-png.flaticon.com/512/3143/3143588.png" alt= "tooth"></div>
-      <div class="container py-5 h-100">
+      <div class="container py-5 h-100" style= "background-color: #7DCDBF">
         <div class="row d-flex justify-content-center align-items-center h-100">
           <div class="col-lg-6">
             <div id= "card">
@@ -90,7 +90,6 @@ export default {
   position: relative;
   background-color: #E8E8E8;
   border-radius: 1rem;
-  top: 3vw;
   padding-top: 1rem;
 }
 .row{
