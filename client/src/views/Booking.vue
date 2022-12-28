@@ -3,6 +3,7 @@
       <b-form @submit.prevent="handleSubmit">
         <div class="head">
           <h1>booking for {{currentDentist.owner }}</h1>
+          <h1>booking for {{currentDentist._id}}</h1>
         </div>
         <b-alert v-model="showDismissibleAlert" variant="success" dismissible>
           {{  notify }}
@@ -68,7 +69,7 @@ export default {
       currentDentist: [],
       publish: {
         topic: 'dentist/getdentistbyId',
-        qos: 2,
+        qos: 1,
         payload: `${this.$route.params.id}`
       },
       numberOfDentists: 0,
@@ -81,8 +82,8 @@ export default {
   },
   mounted() {
     const { topic, qos, payload } = this.publish
-    this.$client.subscribe('ui/dentist/getdentistbyId')
-    this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
+    this.$client.subscribe('ui/get-dental-clinic')
+    // this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
     this.$client.publish(topic, payload, qos, (error) => {
       if (error) {
         console.log(error)
@@ -91,7 +92,7 @@ export default {
 
     this.$client.on('message', (topic, payload) => {
       console.log(topic, payload.toString())
-      if (topic === 'ui/dentist/getdentistbyId') {
+      if (topic === 'ui/get-dental-clinic') {
         // console.log('Dentist RECEIVED!!!!')
         const response = JSON.parse(payload)
         console.log('Dentist: ', response)

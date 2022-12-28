@@ -15,15 +15,16 @@ export default {
       current: {},
       publish: {
         topic: 'dentist/getdentistbyId',
-        qos: 2,
+        qos: 1,
         payload: `${this.$route.params.id}`
       }
 
     }
   },
   mounted() {
+    console.log(`${this.$route.params.id}`)
     const { topic, qos, payload } = this.publish
-    this.$client.subscribe('ui/dentist/getdentistbyId')
+    this.$client.subscribe('ui/get-dental-clinic')
     // this.$client.publish('dentist/getdentistbyId', 'The ui component wants this  1' + `${this.$route.params.id}` + ' dentist for testing!!')
     this.$client.publish(topic, payload, qos, (error) => {
       console.log('Step 1 Publish')
@@ -34,7 +35,7 @@ export default {
 
     this.$client.on('message', (topic, payload) => {
       console.log(topic, payload.toString())
-      if (topic === 'ui/dentist/getdentistbyId') {
+      if (topic === 'ui/get-dental-clinic') {
         const response = JSON.parse(payload)
         console.log('Dentist: ', response)
 
