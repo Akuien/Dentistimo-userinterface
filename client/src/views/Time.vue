@@ -44,16 +44,14 @@
   </b-container>
           <b-button outline variant="light" v-on:click="checkAvailability()" type="button" id="check-availability-button">
              Check availability
+            </b-button>
             <div v-if="availability === true">
             The requested appointment time is available
            </div>
           <div v-else-if="availability === false">
            The requested appointment time
          </div>
-        </b-button>
-   <!--  <b-alert v-model="showDismissibleAlert" variant="danger" dismissible>
-        Dismissible Alert!
-      </b-alert> -->
+
 </b-container>
 </div>
 </template>

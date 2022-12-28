@@ -1,15 +1,17 @@
 <template>
     <div>
     <h1 class="header"> Booking for dentist: <strong> {{currentDentist.name }} </strong> </h1>
+
   <b-container>
     <h3 class="header-2"> Select an appointment date: </h3>
+    <b-form @submit.prevent="checkAvailability">
     <b-row no-gutters>
       <b-col cols="12">
         <b-calendar
           class="calendar"
           block
           start-weekday="1"
-          selected-variant="success"
+          selected-variant="secondary"
           today-variant="info"
           nav-button-variant="info"
           v-model="value"
@@ -20,11 +22,12 @@
         </b-calendar>
     </b-col>
 </b-row>
+
     <h3 class="header-2"> Select an appointment timeslot: </h3>
-<h4> Please choose from opening times</h4>
+<h5> Please choose from opening times</h5>
 
     <div v-if="currentDentist">
-      <h2></h2>
+
       <table class="openTime">
         <thead>
           <th>Day: </th>
@@ -33,11 +36,11 @@
         <tbody v-for="(time, day) in currentDentist.openinghours" :key="day">
           <td>{{ day }}</td>
           <td>{{ time }}</td>
-        </tbody> </table>
+        </tbody>
+      </table>
     </div>
 
      <div class="container">
-     <b-form @submit.prevent="sendApppointmentRequest">
     <div>
      <b-form-radio-group
       v-model="chosenSlot"
@@ -49,26 +52,38 @@
     <div class="mt-3"> Selected time: <strong> {{ chosenSlot }} </strong> </div>
   </div>
 
-</b-form>
 </div>
     <div>
     <p v-if="warning" class="warning-text" size="lg">
       Please choose within opening hours </p>
     </div>
-    <b-button outline variant="light" v-on:click="checkAvailability()"  :disabled="disableBtn"  type="button" id="check-availability-button">
-             Done
+
+    <b-button outline variant="light"  :disabled="disableBtn"  type="submit" id="check-availability-button">
+             Check availability
             </b-button>
+          </b-form>
+
             <div v-if="availability === true">
-          The requested appointment time is available
+              <b-alert class="freeSlot" v-model="showSuccessAlert"
+              v-if="showSuccessAlert"
+              @dismissed="resetSuccessAlert"
+              variant="success" dismissible>
+                The requested appointment time is available
+               </b-alert>
            </div>
+
           <div v-else-if="availability === false">
-          The requested appointment time is not available
-         </div>
+            <b-alert class="takenSlot" v-model="showFailAlert"
+            v-if="showFailAlert"
+            variant="danger"
+            @dismissed="resetFailAlert"
+            dismissible>
+              The requested appointment time is not available
+    </b-alert>
 
+  </div>
 </b-container>
-
 </div>
-
 </template>
 
 <script>
@@ -84,8 +99,9 @@ export default {
     const maxDate = new Date(today)
     maxDate.setMonth(today.getMonth() + 2)
     maxDate.setDate(today.getDate())
+
     return {
-      value: '',
+      value: new Date(),
       date: '',
       time: '',
       day: '',
@@ -99,9 +115,6 @@ export default {
       thursday: 4,
       friday: 5,
       appointments: [],
-      client: {
-        connected: true
-      },
       currentDentist: {},
       numberOfDentists: 0,
       openingHours: {},
@@ -115,20 +128,22 @@ export default {
       thisDay: 9,
       chosenSlot: '',
       disableBtn: true,
-      warning: false
+      warning: false,
+      showSuccessAlert: false,
+      showFailAlert: false
     }
   },
   components: { },
+
   watch: {
+
     value: function () {
       const getDayFromValue = new Date(this.value)
       const getDay = getDayFromValue.getDay()
       this.thisDay = getDay
-      const openingthisDay = Object.keys(this.currentDentist.openinghours)[
-        getDay - 1]
-      const openingHThisDay = Object.values(this.currentDentist.openinghours)[
-        getDay - 1]
-      this.dayPicked = openingthisDay
+      const openingOnDay = Object.keys(this.currentDentist.openinghours)[getDay - 1]
+      const openingHThisDay = Object.values(this.currentDentist.openinghours)[getDay - 1]
+      this.dayPicked = openingOnDay
       this.chosenDayOpeningHours = openingHThisDay
       this.disableButton = true
     },
@@ -153,44 +168,57 @@ export default {
       }
     }
   },
+
   methods: {
+
     dateDisabled(ymd, date) {
     // Disable weekends (Sunday = `0`, Saturday = `6`)
       const weekday = date.getDay()
       // Return `true` if the date should be disabled
       return weekday === 0 || weekday === 6
     },
+    resetSuccessAlert() {
+      this.showSuccessAlert = false
+    },
+    resetFailAlert() {
+      this.showFailAlert = false
+    },
     checkAvailability() {
       this.$client.on('connect', () => {
         console.log('Connected!!')
+
         this.$client.subscribe('appointment/response', 'subscribed to appointment response')
-        this.$client.publish('appointment/request', JSON.stringify({ date: this.value, time: this.selectedTime }))
+        this.$client.publish('appointment/request', JSON.stringify({ date: this.value, start: this.chosenSlot }))
       })
 
       this.$client.on('message', (topic, message) => {
         if (topic === 'appointment/response') {
           const availability = JSON.parse(message).available
+          this.availability = availability
           if (availability) {
             console.log('The requested appointment time is available')
+            this.showSuccessAlert = true
           } else {
             console.log('The requested appointment time is not available')
+            this.showFailAlert = true
           }
         }
       })
     },
+
     sendApppointmentRequest() {
-      const startDate = this.value + ' ' + this.chosenSlot
       const newRequest = {
         dentistid: this.$route.params.dentistid,
         name: this.$store.state.firstname + ' ' + this.$store.state.lastname,
         numberOfDentists: this.numberOfDentists,
-        start: startDate,
+        start: this.chosenSlot,
         user: this.$store.state.id,
         issuance: Date.now()
       }
       console.log(newRequest)
     }
   },
+
   mounted() {
     this.$client.on('connect', () => {
       console.log('Connected!')
@@ -220,11 +248,18 @@ export default {
 </script>
 
 <style scoped>
+
 .openTime {
   width: 40%;
-  background-color: white;
+  background-color: #cebffab6;
   border-collapse: collapse;
-  margin: 20px auto;
+  margin: 25px auto;
+  font-size: large;
+border-radius: 2em;
+}
+.calendar {
+font-size: larger;
+padding: 30px
 }
 .header {
 color: #309aa0ca;;
@@ -251,14 +286,21 @@ border: 2px solid #4a9aae77;
   border-radius: 10px;
 }
 #check-availability-button {
-background-color: #42cdb6;
+background-color: #cebffab6;
 margin: 50px;
 font-size: 20px;
 font-weight: bolder;
 color: #ffffff;
-border: 2px solid #4a9aae77;
+border: 2px solid #8d77ddb6;
 border-radius: 10px;
 width: 20em;
 }
-
+.freeSlot {
+margin: 10px;
+padding: 30px;
+font-size: 20px;
+font-weight: bold;
+background-color: #90dec2;
+margin-bottom: 10px;
+}
 </style>
