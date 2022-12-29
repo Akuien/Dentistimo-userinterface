@@ -6,7 +6,7 @@
     </b-navbar-brand>
       <b-navbar type="light" >
       <b-nav-item href="/" icon="">Home</b-nav-item>
-      <b-nav-item href="/userinformation" icon="">Profile</b-nav-item>
+      <b-nav-item router-link :to="'/userInformation/' + this.$store.state.id ">Profile</b-nav-item>
       <b-nav-item href="/Login" icon="">Login</b-nav-item>
     </b-navbar>
   </b-navbar-nav>

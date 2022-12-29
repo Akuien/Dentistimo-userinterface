@@ -1,6 +1,5 @@
 <template>
 <div>
-  <NavbarVue/>
   <div class="page">
   <div v-if="Profile">
     <profile> </profile>
@@ -21,12 +20,11 @@
 </template>
 
 <script>
-import NavbarVue from '../components/Navbar.vue'
 import Profile from '../components/Profile.vue'
 import UpdateProfile from '../components/updateProfile.vue'
 export default {
   name: 'userInformation',
-  components: { Profile, UpdateProfile, NavbarVue },
+  components: { Profile, UpdateProfile },
   data() {
     return {
       Profile: true

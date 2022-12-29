@@ -21,7 +21,7 @@ export default new Router({
       component: Home
     },
     {
-      path: '/userinformation',
+      path: '/userinformation/:id',
       name: 'userinformation',
       component: UserInformation
     },
