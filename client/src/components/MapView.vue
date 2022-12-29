@@ -48,13 +48,32 @@ export default {
     this.$client.on('connect', () => {
       // console.log('Connected!')
     })
-    this.$client.subscribe('dentist/getAllDentists')
+    /* this.$client.subscribe('dentist/getAllDentists')
     this.$client.publish('my/test/topic99', 'Hello, I am dentist and ironically toothless')
     this.$client.publish('dentists', 'The ui component wants dentists list!!')
 
     this.$client.on('message', (topic, payload) => {
       console.log(topic, payload.toString())
       if (topic === 'dentist/getAllDentists') {
+        const response = JSON.parse(payload)
+        this.dentists = response.map(response => {
+          response.iconSize = [40, 40]
+          return response
+        })
+      }
+      // console.log(this.dentists)
+    })
+  }, */
+    this.$client.subscribe('ui/dental-clinic')
+    this.$client.publish('dentist/getAllDentists', 'The ui component wants dentists list for the map!!', 1, (error) => {
+      console.log('Step 1 Publish')
+      if (error) {
+        console.log(error)
+      }
+    })
+    this.$client.on('message', (topic, payload) => {
+      // console.log(topic, payload.toString())
+      if (topic === 'ui/dental-clinic') {
         const response = JSON.parse(payload)
         this.dentists = response.map(response => {
           response.iconSize = [40, 40]

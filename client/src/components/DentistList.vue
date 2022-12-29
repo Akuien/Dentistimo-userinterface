@@ -67,7 +67,7 @@ export default {
         this.dentistid = this.currentDentist.id
         console.log(this.currentDentist)
         // console.log(this.currentDentist.numberOfDentists)
-        console.log(this.currentDentist.id)
+        console.log('dentist id: ', this.currentDentist.id)
       }
     })
   },
