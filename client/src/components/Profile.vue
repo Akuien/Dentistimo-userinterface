@@ -50,6 +50,11 @@
             </div>
           </div>
         </div>
+        <p>
+          <router-link :to="'/userAppointments/' + this.$store.state.id"
+            >appointments</router-link>
+        </p>
+
       </div>
   </div>
 </template>
