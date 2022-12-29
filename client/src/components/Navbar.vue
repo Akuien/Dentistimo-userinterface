@@ -5,9 +5,9 @@
       <img src="../assets/tooth 17.59.57.png">
     </b-navbar-brand>
       <b-navbar type="light" >
-      <b-nav-item href="/" icon="">Home</b-nav-item>
+      <b-nav-item href="/home" icon="">Home</b-nav-item>
       <b-nav-item href="/userinformation" icon="">Profile</b-nav-item>
-      <b-nav-item href="/Login" icon="">Login</b-nav-item>
+      <b-nav-item href="/" icon="">Login</b-nav-item>
     </b-navbar>
   </b-navbar-nav>
     </div>

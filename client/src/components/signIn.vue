@@ -63,7 +63,7 @@ export default {
     },
     handleClick() {
       localStorage.removeItem('token')
-      this.$router.push('/')
+      this.$router.push('/home')
     },
     created() {
       const local = JSON.parse(localStorage.getItem('localCredentials'))
@@ -122,7 +122,7 @@ export default {
               phoneNumber: userRespond.phoneNumber
             })
           )
-          this.$router.push('/')
+          this.$router.push('/home')
           console.log('here')
           console.log(localStorage)
         } else {
