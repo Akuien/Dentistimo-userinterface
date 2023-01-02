@@ -1,8 +1,9 @@
 <template>
     <div>
+       <h1 class="header"> Booking for dentist: <strong> {{currentDentist.name }} </strong> </h1>
+
       <b-form @submit.prevent="handleSubmit">
         <div class="head">
-          <h1>booking for {{currentDentist.owner }}</h1>
           <h1>booking for {{currentDentist._id}}</h1>
         </div>
         <b-alert v-model="showDismissibleAlert" variant="success" dismissible>
@@ -25,38 +26,43 @@
           :min="min"
           :max="max"
           locale="en-US"
-          @selected="showTimeslots(dateValue)">
+          >
         </b-calendar>
       </b-col>
     </b-row>
-       <div class="form-group">
-         <b-form-group for="timepicker-valid">Choose a time
-    <b-form-timepicker id="datepicker-valid" :state="true" v-model="form.start"></b-form-timepicker></b-form-group>
-       </div>
        <h3 class="header-2"> Select an appointment timeslot: </h3>
-     <b-container class="listitem"
-         v-for="time in times"
-         v-bind:key="time._id">
-               <b-col> Day: {{ time.day }}</b-col>
-              <b-col>Opening Hours: {{ time.openinghour }}:00 - {{ time.closinghour }}:00</b-col>
+<h5> Please choose from opening times</h5>
 
-             <span class="feature">Time Slots:</span> <br />
+    <div v-if="currentDentist">
 
-      <div
-        v-for="time in times"
-        :key="time._id"
-        :value="value">
-       <!--  <b-form-select v-model="timeSlots">
-  <b-form-select-option  v-for="(slot, index) in time.timeSlots" :key="index" :value="value">  {{ index }} - {{ slot }}
-  </b-form-select-option>
-</b-form-select> -->
+      <table class="openTime">
+        <thead>
+          <th>Day: </th>
+          <th>Opening Hours: </th>
+        </thead>
+        <tbody v-for="(time, day) in currentDentist.openinghours" :key="day">
+          <td>{{ day }}</td>
+          <td>{{ time }}</td>
+        </tbody>
+      </table>
+    </div>
+     <div class="container">
+    <div>
+     <b-form-radio-group
+      v-model="chosenSlot"
+      :options="timeslots"
+      class="mb-3"
+      value-field="item"
+      disabled-field="notEnabled">
+    </b-form-radio-group>
+    <div class="mt-3"> Selected time: <strong> {{ chosenSlot }} </strong> </div>
+  </div>
 
-<b-form-group label="Available slots" v-slot="{ ariaDescribedby }" v-model="timeSlots">
-      <b-form-radio v-model="timeSlots" :aria-describedby="ariaDescribedby" name="some-radios" v-for="(slot, index) in time.timeSlots" :key="index" :value="value">{{ slot }}</b-form-radio>
-    </b-form-group>
-    <div class="mt-3">Selected: <strong>{{ value }}</strong></div>
-      </div>
-          </b-container>
+</div>
+    <div>
+    <p v-if="warning" class="warning-text" size="lg">
+      Please choose within opening hours </p>
+    </div>
         <button style="background:#3D5332" class="btn btn-primary btn-block">Submit</button>
       </b-form>
     </div>
@@ -94,17 +100,23 @@ export default {
       showDismissibleAlert: false,
       showDismissibleAlert2: false,
       currentDentist: [],
+      timeslots: [
+        '7:00', '7:30', '8:00', '8:30', '9:00', '9:30', '10:30',
+        '11:00', '11:30', '13:00', '13:30', '14:00', '14:30', '15:00',
+        '15:30', '16:00', '17:00', '17:30', '18:00', '18:30'
+      ],
+      dayPicked: '',
+      chosenDayOpeningHours: '',
+      thisDay: 9,
+      chosenSlot: '',
+      warning: false,
       publish: {
         topic: 'dentist/getdentistbyId',
         qos: 1,
         payload: `${this.$route.params.id}`
       },
       numberOfDentists: 0,
-      email: '',
-      form: {
-        date: '',
-        start: ''
-      }
+      email: ''
     }
   },
   mounted() {
@@ -132,6 +144,39 @@ export default {
       }
     })
   },
+  watch: {
+
+    value: function () {
+      const getDayFromValue = new Date(this.value)
+      const getDay = getDayFromValue.getDay()
+      this.thisDay = getDay
+      const openingOnDay = Object.keys(this.currentDentist.openinghours)[getDay - 1]
+      const openingHThisDay = Object.values(this.currentDentist.openinghours)[getDay - 1]
+      this.dayPicked = openingOnDay
+      this.chosenDayOpeningHours = openingHThisDay
+      this.disableButton = true
+    },
+    chosenSlot: function () {
+      const openingHour = this.chosenDayOpeningHours.substring(
+        0, this.chosenDayOpeningHours.indexOf(':')
+      )
+      const closingH1 = this.chosenDayOpeningHours.substring(
+        this.chosenDayOpeningHours.indexOf('-') + 1
+      )
+      const closingH2 = closingH1.substring(0, closingH1.indexOf(':'))
+      const timeChosen = this.chosenSlot
+      const stInt = parseInt(openingHour)
+      const clInt = parseInt(closingH2)
+      const chosenTime = parseInt(timeChosen)
+      if (chosenTime >= stInt && chosenTime < clInt) {
+        this.warning = false
+        this.disableBtn = false
+      } else {
+        this.warning = true
+        this.disableBtn = true
+      }
+    }
+  },
   methods: {
     dateDisabled(ymd, date) {
     // Disable weekends (Sunday = `0`, Saturday = `6`)
@@ -148,7 +193,7 @@ export default {
         user: this.$store.state.id,
         day: weekday[theDay],
         date: this.dateValue,
-        start: this.form.start,
+        start: this.chosenSlot,
         dentist: `${this.$route.params.id}`,
         issuance: uuid.v4(),
         numberOfDentists: this.numberOfDentists,
@@ -175,51 +220,65 @@ export default {
           this.notify2 = 'Your booking was unsucsessful!!'
         }
       })
-    },
-    showTimeslots(date) {
-      this.$client.subscribe('ui/get-dental-clinic')
-      // this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
-      this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
-        if (error) {
-          console.log(error)
-        }
-      })
-      this.$client.on('message', (topic, payload) => {
-        if (topic === 'ui/get-dental-clinic') {
-          const response = JSON.parse(payload)
-          this.currentDentist = response
-          this.id = this.currentDentist.id
-        }
-        const weekday = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-        const dayOfWeek = new Date(this.dateValue)
-        const theDay = dayOfWeek.getDay()
-
-        this.$client.subscribe('ui/dentistTimeSlotsFound')
-        const denID = {
-          id: this.currentDentist.id,
-          day: weekday[theDay],
-          date: this.dateValue,
-          requestid: Math.floor(Math.random() * 29805688)
-        }
-        // console.log('checking date ' + this.dateValue)
-        // console.log('checking day:::' + weekday[theDay])
-        const newRewquest = JSON.stringify(denID)
-        this.$client.publish('dentist/getTimeslots', newRewquest)
-
-        this.$client.on('message', (topic, payload) => {
-          if (topic === 'ui/dentistTimeSlotsFound') {
-            const response = JSON.parse(payload)
-            this.times = response
-          }
-        })
-      })
     }
   }
 }
 </script>
 
   <style scoped>
-  .head h1 {
-    margin-top: 50px;
-  }
-  </style>
+
+.openTime {
+  width: 40%;
+  background-color: #cebffab6;
+  border-collapse: collapse;
+  margin: 25px auto;
+  font-size: large;
+border-radius: 2em;
+}
+.calendar {
+font-size: larger;
+padding: 30px
+}
+.header {
+color: #309aa0ca;;
+margin: 20px;
+font-weight: bold;
+
+}
+.warning-text{
+font-size: 20px;
+font-weight: bolder;
+color: rgb(175, 11, 11)
+}
+.container {
+  margin-top: 40px;
+  background-color: #41bdcb7c;
+  border-radius: 10px;
+  margin-bottom: 50px;
+}
+.header-2 {
+color: #309aa0e3;
+padding: 5px;
+margin: 30px;
+border: 2px solid #4a9aae77;
+  border-radius: 10px;
+}
+#check-availability-button {
+background-color: #cebffab6;
+margin: 50px;
+font-size: 20px;
+font-weight: bolder;
+color: #ffffff;
+border: 2px solid #8d77ddb6;
+border-radius: 10px;
+width: 20em;
+}
+.freeSlot {
+margin: 10px;
+padding: 30px;
+font-size: 20px;
+font-weight: bold;
+background-color: #90dec2;
+margin-bottom: 10px;
+}
+</style>
