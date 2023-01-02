@@ -3,6 +3,7 @@
     <h1 class="header"> Booking for dentist: <strong> {{currentDentist.name }} </strong> </h1>
   <b-container>
     <h3 class="header-2"> Select an appointment date: </h3>
+    <b-form @submit.prevent="checkAvailability">
      <b-row no-gutters>
       <b-col cols="12">
         <b-calendar
@@ -42,16 +43,30 @@
       </div>
 
   </b-container>
-          <b-button outline variant="light" v-on:click="checkAvailability()" type="button" id="check-availability-button">
+  <b-button outline variant="light"  type="submit" id="check-availability-button">
              Check availability
             </b-button>
-            <div v-if="availability === true">
-            The requested appointment time is available
-           </div>
-          <div v-else-if="availability === false">
-           The requested appointment time
-         </div>
+          </b-form>
 
+            <div v-if="availability === true">
+              <b-alert class="freeSlot" v-model="showSuccessAlert"
+              v-if="showSuccessAlert"
+              @dismissed="resetSuccessAlert"
+              variant="success" dismissible>
+                The requested appointment time is available
+               </b-alert>
+           </div>
+
+          <div v-else-if="availability === false">
+            <b-alert class="takenSlot" v-model="showFailAlert"
+            v-if="showFailAlert"
+            variant="danger"
+            @dismissed="resetFailAlert"
+            dismissible>
+              The requested appointment time is not available
+    </b-alert>
+
+  </div>
 </b-container>
 </div>
 </template>
@@ -87,28 +102,35 @@ export default {
       selected: '',
       currentDentist: [],
       id: 0,
-      times: undefined
+      times: undefined,
+      warning: false,
+      showSuccessAlert: false,
+      showFailAlert: false
     }
   },
-  mounted() {
 
-  },
-  getDentist() {
-    this.$client.subscribe('ui/get-dental-clinic')
-    this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
-      if (error) {
-        console.log(error)
-      }
-    })
-    this.$client.on('message', (topic, payload) => {
-      if (topic === 'ui/get-dental-clinic') {
-        const response = JSON.parse(payload)
-        this.currentDentist = response
-        this.id = this.currentDentist.id
-      }
-    })
-  },
   methods: {
+    getDentist() {
+      this.$client.subscribe('ui/get-dental-clinic')
+      this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
+        if (error) {
+          console.log(error)
+        }
+      })
+      this.$client.on('message', (topic, payload) => {
+        if (topic === 'ui/get-dental-clinic') {
+          const response = JSON.parse(payload)
+          this.currentDentist = response
+          this.id = this.currentDentist.id
+        }
+      })
+    },
+    resetSuccessAlert() {
+      this.showSuccessAlert = false
+    },
+    resetFailAlert() {
+      this.showFailAlert = false
+    },
     dateDisabled(ymd, date) {
     // Disable weekends (Sunday = `0`, Saturday = `6`)
       const weekday = date.getDay()
@@ -156,20 +178,23 @@ export default {
       })
     },
     checkAvailability() {
-      // Send a message to the backend requesting the availability of time
       this.$client.on('connect', () => {
         console.log('Connected!!')
+
         this.$client.subscribe('appointment/response', 'subscribed to appointment response')
-        this.$client.publish('appointment/request', JSON.stringify({ date: this.date, time: this.selectedTime }))
+        this.$client.publish('appointment/request', JSON.stringify({ date: this.value, start: this.chosenSlot }))
       })
 
       this.$client.on('message', (topic, message) => {
         if (topic === 'appointment/response') {
           const availability = JSON.parse(message).available
+          this.availability = availability
           if (availability) {
             console.log('The requested appointment time is available')
+            this.showSuccessAlert = true
           } else {
             console.log('The requested appointment time is not available')
+            this.showFailAlert = true
           }
         }
       })
