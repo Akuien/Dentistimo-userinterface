@@ -101,7 +101,7 @@ export default {
     maxDate.setDate(today.getDate())
 
     return {
-      value: new Date(),
+      value: '',
       date: '',
       time: '',
       day: '',
@@ -168,6 +168,9 @@ export default {
       }
     }
   },
+  created() {
+    this.getDentist()
+  },
 
   methods: {
 
@@ -216,35 +219,29 @@ export default {
         issuance: Date.now()
       }
       console.log(newRequest)
-    }
-  },
-
-  mounted() {
-    this.$client.on('connect', () => {
-      console.log('Connected!')
-    })
-    this.$client.subscribe('ui/dentist/getdentistbyId')
-    this.$client.publish('dentist/getdentistbyId', 'pleaseee send dentist: ' + `${this.$route.params.dentistid}`, 1,
-      (error) => {
-        if (error) {
-          console.log(error)
+    },
+    getDentist() {
+      this.$client.subscribe('ui/get-dental-clinic')
+      this.$client.publish('dentist/getdentistbyId', `${this.$route.params.dentistid}`, 1,
+        (error) => {
+          if (error) {
+            console.log(error)
+          }
+        })
+      this.$client.on('message', (topic, payload) => {
+        if (topic === 'ui/get-dental-clinic') {
+          const response = JSON.parse(payload)
+          this.currentDentist = response
+          this.dentistid = this.currentDentist.id
+          this.name = response.name
+          this.numberOfDentists = response.numberOfDentists
+          this.openingHours = response.openinghours
+          console.log(this.currentDentist)
         }
       })
-    this.$client.on('message', (topic, payload) => {
-      console.log(topic, payload.toString())
-
-      if (topic === 'ui/dentist/getdentistbyId') {
-        const response = JSON.parse(payload)
-        this.currentDentist = response
-        this.name = response.name
-        this.numberOfDentists = response.numberOfDentists
-        this.openingHours = response.openinghours
-        console.log(this.currentDentist)
-      }
-    })
+    }
   }
 }
-
 </script>
 
 <style scoped>
@@ -270,7 +267,7 @@ font-weight: bold;
 .warning-text{
 font-size: 20px;
 font-weight: bolder;
-color: red
+color: rgb(175, 11, 11)
 }
 .container {
   margin-top: 40px;
