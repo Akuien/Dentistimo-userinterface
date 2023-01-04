@@ -32,8 +32,7 @@
                       <div style="color: rgb(0, 0, 0); text-align: center;">
                         <h1 style="margin: 1rem 0">Welcome to Dentistimo</h1>
                         <p style="padding-bottom: 16px">
-                          Thank you for signing up to Dentistimo.Your account is
-                          now verified!. We're looking forward to provide you
+                          Your account is now verified!. Thank you for signing up to Dentistimo. We're looking forward to provide you
                           with the best service! Click the link below to login
                           to your account:
                         </p>

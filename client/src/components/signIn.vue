@@ -1,17 +1,19 @@
 <template>
-    <form @submit.prevent="login">
+  <div class="login-box">
+<form @submit.prevent="login">
       <div class="head">
-      <h1>Welcome to dentistimo!
+      <h2>
         Login
-      </h1>
+      </h2>
       </div>
       <div class="form-group">
         <input
           type="email"
           class="form-control"
           v-model="form.email"
-          placeholder="Email"
+          name="" required=""
         />
+         <label>Email</label>
       </div>
 
       <div class="form-group">
@@ -19,12 +21,15 @@
           type="password"
           class="form-control"
           v-model="form.password"
-          placeholder="Password"
+          name="" required=""
           :invalid-feedback="invalidPassword"
         />
+         <label>Password</label>
       </div>
-      <button style="background:#3D5332" class="btn btn-primary btn-block">Submit</button>
+      <button style="background:#3D5332" class="btn">Log In</button>
     </form>
+
+  </div>
   </template>
 <script>
 export default {
@@ -63,7 +68,7 @@ export default {
     },
     handleClick() {
       localStorage.removeItem('token')
-      this.$router.push('/')
+      this.$router.push('/home')
     },
     created() {
       const local = JSON.parse(localStorage.getItem('localCredentials'))
@@ -122,7 +127,7 @@ export default {
               phoneNumber: userRespond.phoneNumber
             })
           )
-          this.$router.push('/')
+          this.$router.push('/home')
           console.log('here')
           console.log(localStorage)
         } else {
@@ -133,17 +138,85 @@ export default {
   }
 }
 </script>
-  <style>
+  <style scoped>
+  .login-box .form-group {
+  position: relative;
+}
   .head h1 {
-    color: #3D5332;
-    margin-top: 20px;
+    color: #000000;
+    margin: 0 0 30px;
+    padding: 0;
+    text-align: center;
   }
-  .login {
-    color: white;
-    margin: 10px;
-  }
-  .label {
-    color: white;
-  }
+.login-box .form-group input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  color: rgb(0, 0, 0);
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid rgb(0, 0, 0);
+  outline: none;
+  background: transparent;
+}
+
+.login-box .form-group label {
+  position: absolute;
+  top:0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: rgb(0, 0, 0);
+  pointer-events: none;
+  transition: .5s;
+}
+
+.login-box .form-group input:focus ~ label,
+.login-box .form-group input:valid ~ label {
+  top: -20px;
+  left: 0;
+  color: #050505;
+  font-size: 12px;
+}
+
+.btn{
+  border-radius: 4px;
+  height: 44px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  -webkit-transition : all 200ms linear;
+  transition: all 200ms linear;
+  padding: 0 30px;
+  letter-spacing: 1px;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  -ms-flex-pack: center;
+  text-align: center;
+  border: none;
+  background-color: #ffeba7 !important;
+  color: #3D5332;
+  box-shadow: 0 8px 24px 0 rgba(255,235,167,.2);
+}
+.btn:active,
+.btn:focus{
+  background-color: #3D5332;
+  color: #ffeba7;
+  box-shadow: 0 8px 24px 0 rgba(16,39,112,.2);
+}
+.btn:hover{
+  background-color: #3D5332 !important;
+  color: #ffeba7;
+  box-shadow: 0 8px 24px 0 rgba(16,39,112,.2);
+}
 
   </style>

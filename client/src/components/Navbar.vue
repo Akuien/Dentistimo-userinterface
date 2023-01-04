@@ -5,9 +5,9 @@
       <img src="../assets/tooth 17.59.57.png">
     </b-navbar-brand>
       <b-navbar type="light" >
-      <b-nav-item href="/" icon="">Home</b-nav-item>
+      <b-nav-item href="/home" icon="">Home</b-nav-item>
       <b-nav-item router-link :to="'/userInformation/' + this.$store.state.id ">Profile</b-nav-item>
-      <b-nav-item href="/Login" icon="">Login</b-nav-item>
+      <b-nav-item href="/" icon="">Login</b-nav-item>
     </b-navbar>
   </b-navbar-nav>
     </div>
@@ -22,20 +22,20 @@ export default {
 <style>
 
 .navbar-nav {
-  height: 65px;
+  height: 70px;
   font-weight: bold;
-  margin: 7px;
+  margin-bottom: 7px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: #3ab286;
 }
 .nav-item  {
   font-size:23px;
-  margin: 3px;
+  margin: 1px;
   margin-top: -0.5em;
   padding-bottom: 0.5px;
-  background-color: white;
+  background-color: #3ab286;
   padding: 0.01rem 2rem;
   font-weight: bold;
   color: black;

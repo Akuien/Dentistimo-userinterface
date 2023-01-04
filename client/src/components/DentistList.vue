@@ -88,7 +88,7 @@ export default {
   height: 90vh;
   li {
     &:hover {
-      background-color: #86b9a1;
+      background-color: #E7F1E5;
     }
   }
 }

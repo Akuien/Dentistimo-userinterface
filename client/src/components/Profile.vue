@@ -1,7 +1,8 @@
 <template>
   <div>
     <div id="profile"> Profile <img id="tooth" src="https://cdn-icons-png.flaticon.com/512/3143/3143588.png" alt= "tooth"></div>
-      <div class="container py-5 h-100" style= "background-color: #7DCDBF">
+      <div class="container py-5 h-100" style= "background-color: #7DCDBF; border-style: solid;
+    border-color: black;">
         <div class="row d-flex justify-content-center align-items-center h-100">
           <div class="col-lg-6">
             <div id= "card">
@@ -9,7 +10,7 @@
 
                 <div class="row">
                   <div class="col">
-                    <p class="mb-0 text">First Name</p>
+                    <p class="mb-0 text">First Name :</p>
                   </div>
                   <div class="col">
                     <p class="text-muted mb-0">{{this.user.firstName}}</p>
@@ -19,7 +20,7 @@
 
                 <div class="row">
                   <div class="col">
-                    <p class="mb-0 text">Last Name</p>
+                    <p class="mb-0 text">Last Name :</p>
                   </div>
                   <div class="col">
                     <p class="text-muted mb-0">{{this.user.lastName}}</p>
@@ -29,7 +30,7 @@
 
                 <div class="row">
                   <div class="col">
-                    <p class="mb-0 text">Email</p>
+                    <p class="mb-0 text">Email :</p>
                   </div>
                   <div class="col">
                     <p class="text-muted mb-0">{{this.user.email}}</p>
@@ -39,7 +40,7 @@
 
                 <div class="row">
                   <div class="col">
-                    <p class="mb-0 text">Phone number</p>
+                    <p class="mb-0 text">Phone number :</p>
                   </div>
                   <div class="col">
                     <p class="text-muted mb-0">{{this.user.phoneNumber}}</p>
@@ -52,7 +53,7 @@
         </div>
         <p>
           <router-link :to="'/userAppointments/' + this.$store.state.id"
-            >appointments</router-link>
+            >Your Appointment History</router-link>
         </p>
 
       </div>
@@ -84,7 +85,7 @@ export default {
   font-family: 'Jost', sans-serif;
   font-style: italic;
   top: 4vw;
-  color: #3D5332;
+  color: #000000;
 }
 #tooth{
   position: relative;
