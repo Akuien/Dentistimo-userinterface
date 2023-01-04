@@ -3,14 +3,14 @@
     <div>
       <!-- <Navbar /> -->
       <div class="container">
-        <h2 class="head">Appointments</h2>
+        <h1 class="head">APPOINTMENT HISTORY</h1>
         <b-container class="listitem"
        v-for="appointment in appointments"
       v-bind:key="appointment._id">
-          <p><b-col>dentist id: {{ appointment.dentist  }}</b-col></p>
-          <b-col>day: {{ appointment.day }}</b-col>
-          <b-col> date: {{ appointment.date }}</b-col>
-          <b-col> start: {{ appointment.start }}</b-col>
+          <p><b-col>Appointment Number: {{ appointment.dentist  }}</b-col></p>
+          <b-col>On: {{ appointment.day }}</b-col>
+          <b-col> Date: {{ appointment.date }}</b-col>
+          <b-col> Booked Time: {{ appointment.start }}</b-col><br>
           <button id="delButton"
         v-on:click="deleteAppointment(appointment._id)"
         >Delete Appointment</button>
@@ -82,28 +82,49 @@ export default {
 
 <style lang="scss" scoped >
 body {
-  background:  #3D5332;
+  background:  #FDF0CA;
   // background:#1aa9d7 ;
   height: 600vh;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .listitem {
   margin-top: 50px;
-  color: #3D5332;
+  color: #000000;
+  background-color: #ffffff ;
+  padding: 2%;
+  border-style: solid;
+  border-color: #000000;
 }
 .head {
-  color: white;
+  color: rgb(255, 255, 255);
   font-family: sans-serif;
+  font-weight: 900;
 }
 #delButton {
-background-color: #3D5332;
-border: none;
-color: white;
-padding: 15px 32px;
-text-align: center;
-text-decoration: none;
-display: inline-block;
-font-size: 16px;
+  background-color: #fbeee0;
+  border: 2px solid #422800;
+  border-radius: 30px;
+  box-shadow: #422800 4px 4px 0 0;
+  color: #422800;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 0 18px;
+  line-height: 50px;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+#delButton:hover {
+  background-color: #fff;
+}
+
+#delButton:active {
+  box-shadow: #422800 2px 2px 0 0;
+  transform: translate(2px, 2px);
 }
 </style>
