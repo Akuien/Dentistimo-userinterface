@@ -13,24 +13,27 @@
        <b-alert v-model="showDismissibleAlert2" variant="danger" dismissible>
           {{  notify2 }}
       </b-alert>
-       <b-row no-gutters>
+
+    <h3 class="header-2"> Select an appointment date: </h3>
+    <b-row no-gutters>
       <b-col cols="12">
         <b-calendar
           class="calendar"
           block
-          selected-variant="success"
+          start-weekday="1"
+          selected-variant="secondary"
           today-variant="info"
           nav-button-variant="info"
-          v-model="dateValue"
+          v-model="value"
           :date-disabled-fn="dateDisabled"
           :min="min"
           :max="max"
-          locale="en-US"
-          >
+          locale="en-US">
         </b-calendar>
-      </b-col>
-    </b-row>
-       <h3 class="header-2"> Select an appointment timeslot: </h3>
+    </b-col>
+</b-row>
+
+<h3 class="header-2"> Select an appointment timeslot: </h3>
 <h5> Please choose from opening times</h5>
 
     <div v-if="currentDentist">
@@ -46,7 +49,8 @@
         </tbody>
       </table>
     </div>
-     <div class="container">
+
+    <div class="container">
     <div>
      <b-form-radio-group
       v-model="chosenSlot"
@@ -63,12 +67,14 @@
     <p v-if="warning" class="warning-text" size="lg">
       Please choose within opening hours </p>
     </div>
-     <b-button outline variant="light"  :disabled="disableBtn"  type="submit" id="check-availability-button">
+
+     <b-button outline variant="light"  :disabled="disableBtn"  @click="checkAvailability" id="check-availability-button">
              Check availability
             </b-button>
-        <button style="background:#3D5332" class="btn btn-primary btn-block">Submit</button>
-      </b-form>
+
       <div v-if="availability === true">
+
+        <button style="background:#3D5332"  type="submit" class="btn btn-primary btn-block">Submit</button>
               <b-alert class="freeSlot" v-model="showSuccessAlert"
               v-if="showSuccessAlert"
               @dismissed="resetSuccessAlert"
@@ -85,8 +91,8 @@
             dismissible>
               The requested appointment time is not available
     </b-alert>
-
   </div>
+</b-form>
     </div>
   </template>
 
@@ -117,6 +123,7 @@ export default {
       wednesday: 3,
       thursday: 4,
       friday: 5,
+      availability: null,
       notify: '',
       notify2: '',
       showDismissibleAlert: false,
@@ -131,6 +138,7 @@ export default {
       chosenDayOpeningHours: '',
       thisDay: 9,
       chosenSlot: '',
+      disableBtn: true,
       warning: false,
       showSuccessAlert: false,
       showFailAlert: false,
@@ -162,6 +170,7 @@ export default {
 
         this.currentDentist = response
         this.numberOfDentists = this.currentDentist.numberOfDentists
+        this.openingHours = response.openinghours
         // console.log(this.currentDentist)
         // console.log(this.currentDentist.numberOfDentists)
         console.log(this.numberOfDentists)
@@ -331,6 +340,14 @@ padding: 30px;
 font-size: 20px;
 font-weight: bold;
 background-color: #90dec2;
+margin-bottom: 10px;
+}
+.takenSlot {
+  margin: 10px;
+padding: 30px;
+font-size: 20px;
+font-weight: bold;
+background-color: #df8ea2;
 margin-bottom: 10px;
 }
 </style>
