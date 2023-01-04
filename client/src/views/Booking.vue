@@ -63,8 +63,30 @@
     <p v-if="warning" class="warning-text" size="lg">
       Please choose within opening hours </p>
     </div>
+     <b-button outline variant="light"  :disabled="disableBtn"  type="submit" id="check-availability-button">
+             Check availability
+            </b-button>
         <button style="background:#3D5332" class="btn btn-primary btn-block">Submit</button>
       </b-form>
+      <div v-if="availability === true">
+              <b-alert class="freeSlot" v-model="showSuccessAlert"
+              v-if="showSuccessAlert"
+              @dismissed="resetSuccessAlert"
+              variant="success" dismissible>
+                The requested appointment time is available
+               </b-alert>
+           </div>
+
+          <div v-else-if="availability === false">
+            <b-alert class="takenSlot" v-model="showFailAlert"
+            v-if="showFailAlert"
+            variant="danger"
+            @dismissed="resetFailAlert"
+            dismissible>
+              The requested appointment time is not available
+    </b-alert>
+
+  </div>
     </div>
   </template>
 
@@ -110,6 +132,8 @@ export default {
       thisDay: 9,
       chosenSlot: '',
       warning: false,
+      showSuccessAlert: false,
+      showFailAlert: false,
       publish: {
         topic: 'dentist/getdentistbyId',
         qos: 1,
@@ -218,6 +242,34 @@ export default {
           this.showDismissibleAlert = false
           this.showDismissibleAlert2 = true
           this.notify2 = 'Your booking was unsucsessful!!'
+        }
+      })
+    },
+    resetSuccessAlert() {
+      this.showSuccessAlert = false
+    },
+    resetFailAlert() {
+      this.showFailAlert = false
+    },
+    checkAvailability() {
+      this.$client.on('connect', () => {
+        console.log('Connected!!')
+
+        this.$client.subscribe('appointment/response', 'subscribed to appointment response')
+        this.$client.publish('appointment/request', JSON.stringify({ date: this.value, start: this.chosenSlot }))
+      })
+
+      this.$client.on('message', (topic, message) => {
+        if (topic === 'appointment/response') {
+          const availability = JSON.parse(message).available
+          this.availability = availability
+          if (availability) {
+            console.log('The requested appointment time is available')
+            this.showSuccessAlert = true
+          } else {
+            console.log('The requested appointment time is not available')
+            this.showFailAlert = true
+          }
         }
       })
     }
