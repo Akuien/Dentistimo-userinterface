@@ -21,6 +21,13 @@ export default {
   },
   methods: {
 
+  },
+  mounted() {
+    const user = localStorage.getItem('localCredentials')
+    if (!user) {
+      this.$router.push({ name: 'login' })
+      alert('Please log in first')
+    }
   }
 }
 </script>

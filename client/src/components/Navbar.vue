@@ -8,6 +8,7 @@
       <b-nav-item href="/home" icon="">Home</b-nav-item>
       <b-nav-item router-link :to="'/userInformation/' + this.$store.state.id ">Profile</b-nav-item>
       <b-nav-item href="/" icon="">Login</b-nav-item>
+      <b-nav-item href="/" v-on:click="logout" icon="">Logout</b-nav-item>
     </b-navbar>
   </b-navbar-nav>
     </div>
@@ -16,7 +17,15 @@
 <script>
 
 export default {
+  methods: {
+    logout() {
+      localStorage.clear()
+      this.$router.push({ name: 'login' })
+    }
+
+  }
 }
+
 </script>
 
 <style>
