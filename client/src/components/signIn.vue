@@ -55,9 +55,6 @@ export default {
     this.subscribe()
   },
   methods: {
-    Authentication() {
-      this.$router.push('/signUp')
-    },
     subscribe() {
       this.$client.subscribe('pub/#', 1, (error, res) => {
         if (error) {
@@ -65,10 +62,6 @@ export default {
         }
         console.log('Subscribed to ', res)
       })
-    },
-    handleClick() {
-      localStorage.removeItem('token')
-      this.$router.push('/home')
     },
     created() {
       const local = JSON.parse(localStorage.getItem('localCredentials'))
@@ -130,8 +123,6 @@ export default {
           this.$router.push('/home')
           console.log('here')
           console.log(localStorage)
-        } else {
-          console.log('error')
         }
       })
     }
