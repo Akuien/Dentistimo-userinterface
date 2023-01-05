@@ -74,7 +74,7 @@
 
       <div v-if="availability === true">
 
-        <button style="background:#3D5332"  type="submit" class="btn btn-primary btn-block">Submit</button>
+        <button style="background:#3D5332"  type="submit" class="btn btn-primary btn-block"> Book now </button>
               <b-alert class="freeSlot" v-model="showSuccessAlert"
               v-if="showSuccessAlert"
               @dismissed="resetSuccessAlert"
@@ -162,9 +162,9 @@ export default {
     })
 
     this.$client.on('message', (topic, payload) => {
-      console.log(topic, payload.toString())
       if (topic === 'ui/get-dental-clinic') {
         // console.log('Dentist RECEIVED!!!!')
+        console.log(topic, payload.toString())
         const response = JSON.parse(payload)
         console.log('Dentist: ', response)
 
@@ -218,14 +218,15 @@ export default {
       return weekday === 0 || weekday === 6
     },
     handleSubmit() {
+      console.log('handleSubmit')
       const weekday = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-      const dayOfWeek = new Date(this.dateValue)
+      const dayOfWeek = new Date(this.value)
       const theDay = dayOfWeek.getDay()
       console.log('this is the email : ' + this.$store.state.email)
       const bookingInfo = {
         user: this.$store.state.id,
         day: weekday[theDay],
-        date: this.dateValue,
+        date: this.value,
         start: this.chosenSlot,
         dentist: `${this.$route.params.id}`,
         issuance: uuid.v4(),
@@ -240,8 +241,9 @@ export default {
       console.log('testing')
 
       this.$client.on('message', (topic, message) => {
-        console.log(topic, message.toString())
+      //  console.log(topic, message.toString())
         if (topic === 'ui/approved') {
+          console.log('message recieved topic ui approved')
           this.notify = 'Your have booked a new appointment!'
           this.showDismissibleAlert = true
           this.showDismissibleAlert2 = false
@@ -261,12 +263,12 @@ export default {
       this.showFailAlert = false
     },
     checkAvailability() {
-      this.$client.on('connect', () => {
-        console.log('Connected!!')
+      // this.$client.on('connect', () => {
+      console.log('Connected!!')
 
-        this.$client.subscribe('appointment/response', 'subscribed to appointment response')
-        this.$client.publish('appointment/request', JSON.stringify({ date: this.value, start: this.chosenSlot }))
-      })
+      this.$client.subscribe('appointment/response', 'subscribed to appointment response')
+      this.$client.publish('appointment/request', JSON.stringify({ date: this.value, start: this.chosenSlot }))
+      //  })
 
       this.$client.on('message', (topic, message) => {
         if (topic === 'appointment/response') {
@@ -275,7 +277,7 @@ export default {
           if (availability) {
             console.log('The requested appointment time is available')
             this.showSuccessAlert = true
-          } else {
+          } else if (!availability) {
             console.log('The requested appointment time is not available')
             this.showFailAlert = true
           }
@@ -284,6 +286,7 @@ export default {
     }
   }
 }
+
 </script>
 
   <style scoped>
