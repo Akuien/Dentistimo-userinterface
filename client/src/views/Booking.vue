@@ -143,28 +143,20 @@ export default {
       warning: false,
       showSuccessAlert: false,
       showFailAlert: false,
-      publish: {
-        topic: 'dentist/getdentistbyId',
-        qos: 1,
-        payload: `${this.$route.params.id}`
-      },
       numberOfDentists: 0,
       email: ''
     }
   },
   mounted() {
-    const { topic, qos, payload } = this.publish
-    this.$client.subscribe('ui/get-dental-clinic')
-    // this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
-    this.$client.publish(topic, payload, qos, (error) => {
+    this.$client.subscribe('getDentistById/response')
+    this.$client.publish('dentist/dentistById/request', `${this.$route.params.id}`, { qos: 1, retain: false }, (error) => {
       if (error) {
         console.log(error)
       }
     })
 
     this.$client.on('message', (topic, payload) => {
-      if (topic === 'ui/get-dental-clinic') {
-        // console.log('Dentist RECEIVED!!!!')
+      if (topic === 'getDentistById/response') {
         console.log(topic, payload.toString())
         const response = JSON.parse(payload)
         console.log('Dentist: ', response)
@@ -172,9 +164,6 @@ export default {
         this.currentDentist = response
         this.numberOfDentists = this.currentDentist.numberOfDentists
         this.openingHours = response.openinghours
-        // console.log(this.currentDentist)
-        // console.log(this.currentDentist.numberOfDentists)
-        console.log(this.numberOfDentists)
       }
     })
   },

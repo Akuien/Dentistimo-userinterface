@@ -40,34 +40,9 @@ export default {
       dentistid: 0
     }
   },
-  mounted() {
-    this.$client.subscribe('ui/dentist/getdentistbyId')
-    this.$client.publish('dentists', 'The ui component wants this 1 ' + `${this.$route.params.id}` + ' dentist!!')
-    this.$client.publish('dentist/getdentistbyId', `${this.$route.params.id}`, 1, (error) => {
-      if (error) {
-        console.log(error)
-      }
-    })
-
-    this.$client.on('message', (topic, payload) => {
-      // console.log(topic, payload.toString())
-      if (topic === 'ui/dentist/getdentistbyId') {
-        console.log('Dentist RECEIVED!!!!')
-        const response = JSON.parse(payload)
-        console.log('Dentist: ', response)
-
-        this.currentDentist = response
-        this.dentistid = this.currentDentist.id
-        console.log(this.currentDentist)
-        // console.log(this.currentDentist.numberOfDentists)
-        console.log('dentist id: ', this.currentDentist.id)
-      }
-    })
-  },
   methods: {
     mouseOver(index) {
       this.$emit('mouse-over-dentist', index)
-      // console.log(this.dentists[index]._id);
     },
     mouseLeave(index) {
       this.$emit('mouse-left-dentist', index)

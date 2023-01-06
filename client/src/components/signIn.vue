@@ -56,11 +56,10 @@ export default {
   },
   methods: {
     subscribe() {
-      this.$client.subscribe('pub/#', 1, (error, res) => {
+      this.$client.subscribe('user/#', { qos: 1, retain: false }, (error, res) => {
         if (error) {
           console.log(error)
         }
-        console.log('Subscribed to ', res)
       })
     },
     created() {
@@ -70,7 +69,6 @@ export default {
       this.$store.state.id = local.id
       console.log(this.$store.state.email, this.$store.state.id)
     },
-
     onSubmit(event) {
       event.preventDefault()
       alert(JSON.stringify(this.form))
@@ -90,7 +88,7 @@ export default {
         password: this.form.password
       }
       const logininformation = JSON.stringify(loginInfo)
-      this.$client.publish('LoginInfo/test', logininformation, 1, (error) => {
+      this.$client.publish('user/login/request', logininformation, { qos: 1, retain: false }, (error) => {
         if (error) {
           console.log(error)
         } else {
@@ -100,7 +98,7 @@ export default {
     },
     loginResponse() {
       this.$client.on('message', (topic, message) => {
-        if (topic === 'pub/loginResponse') {
+        if (topic === 'user/login/response') {
           const userRespond = JSON.parse(message)
           this.$store.state.id = userRespond._id
           this.$store.state.password = userRespond.password
@@ -121,7 +119,6 @@ export default {
             })
           )
           this.$router.push('/home')
-          console.log('here')
           console.log(localStorage)
         }
       })
