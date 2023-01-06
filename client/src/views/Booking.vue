@@ -223,24 +223,23 @@ export default {
         numberOfDentists: this.numberOfDentists,
         email: this.$store.state.email
       }
-      this.$client.subscribe('ui/approved')
-      this.$client.subscribe('ui/notapproved')
+      this.$client.subscribe('booking/response/approved')
+      this.$client.subscribe('booking/response/notapproved')
 
       const newRewquest = JSON.stringify(bookingInfo)
-      this.$client.publish('BookingInfo/test', newRewquest)
-      console.log('testing')
+      this.$client.publish('booking/request', newRewquest, { qos: 1, retain: false }, (error) => {
+        if (error) {
+          console.log(error)
+        }
+      })
 
       this.$client.on('message', (topic, message) => {
-      //  console.log(topic, message.toString())
-        if (topic === 'ui/approved') {
-          console.log('message recieved topic ui approved')
+        if (topic === 'booking/response/approved') {
           this.notify = 'Your have booked a new appointment!'
           this.showDismissibleAlert = true
-          this.showDismissibleAlert2 = false
           const response = JSON.parse(message)
           console.log(response)
-        } else if (topic === 'ui/notapproved') {
-          this.showDismissibleAlert = false
+        } else if (topic === 'booking/response/notapproved') {
           this.showDismissibleAlert2 = true
           this.notify2 = 'Your booking was unsucsessful!!'
         }
