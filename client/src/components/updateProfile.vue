@@ -6,6 +6,10 @@
     border-color: black;">
             <div class="row d-flex justify-content-center align-items-center h-100">
               <div class="col-lg-6">
+                <b-alert v-model="showDismissibleAlert" variant="success" dismissible>
+                 {{ message }}
+                  </b-alert>
+
                 <div id= "card">
                   <div class="card-body">
 
@@ -50,12 +54,13 @@
 export default {
   data() {
     return {
+      message: '',
+      showDismissibleAlert: false,
       form: {
         firstName: '',
         lastName: '',
         phoneNumber: ''
       }
-
     }
   },
   mounted() {
@@ -86,7 +91,7 @@ export default {
 
       }
       const userInfo = JSON.stringify(user)
-      this.$client.publish('user/updateUser', userInfo, 1, (error) => {
+      this.$client.publish('user/updateUser/request', userInfo, { qos: 1, retain: false }, (error) => {
         if (error) {
           console.log(error)
         } else {
@@ -97,7 +102,7 @@ export default {
 
     userUpdated() {
       this.$client.on('message', (topic, message) => {
-        if (topic === 'ui/userUpdated') {
+        if (topic === 'user/updateUser/response') {
           const userNew = JSON.parse(message)
           this.$store.state.firstName = userNew.firstName
           this.$store.state.lastName = userNew.lastName
@@ -114,9 +119,8 @@ export default {
               phoneNumber: userNew.phoneNumber
             })
           )
-          this.$router.push('/')
-          console.log('here')
-          console.log(localStorage)
+          this.message = 'Your Profile has been updated!'
+          this.showDismissibleAlert = true
         } else {
           this.$client.on('message', (topic, message) => {
             if (topic === 'ui/UserError') {
