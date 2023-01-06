@@ -38,7 +38,6 @@ export default {
     })
     this.$client.subscribe('getAllDentists/response')
     this.$client.publish('dentist/getAllDentists/request', 'The ui component wants dentists list for the map!!', { qos: 1, retain: false }, (error) => {
-      console.log('Step 1 Publish')
       if (error) {
         console.log(error)
       }
