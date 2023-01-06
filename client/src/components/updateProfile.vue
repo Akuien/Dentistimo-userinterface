@@ -98,6 +98,7 @@ export default {
           console.log(userInfo)
         }
       })
+      // this.$router.push('/profile/' + this.$store.state.id)
     },
 
     userUpdated() {
