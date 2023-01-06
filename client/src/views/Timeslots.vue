@@ -221,15 +221,15 @@ export default {
       console.log(newRequest)
     },
     getDentist() {
-      this.$client.subscribe('ui/get-dental-clinic')
-      this.$client.publish('dentist/getdentistbyId', `${this.$route.params.dentistid}`, 1,
+      this.$client.subscribe('getDentistById/response')
+      this.$client.publish('dentist/dentistById/request', `${this.$route.params.dentistid}`, { qos: 1, retain: false },
         (error) => {
           if (error) {
             console.log(error)
           }
         })
       this.$client.on('message', (topic, payload) => {
-        if (topic === 'ui/get-dental-clinic') {
+        if (topic === 'getDentistById/response') {
           const response = JSON.parse(payload)
           this.currentDentist = response
           this.dentistid = this.currentDentist.id
