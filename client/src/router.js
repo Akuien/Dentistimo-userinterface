@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import UserInformation from './views/UserInformation.vue'
+import Profile from './components/Profile.vue'
 import logIn from './views/logIn.vue'
 import VerifyEmail from './views/VerifyEmail.vue'
 import Booking from './views/Booking.vue'
@@ -22,6 +23,11 @@ export default new Router({
       path: '/userinformation/:id',
       name: 'userinformation',
       component: UserInformation
+    },
+    {
+      path: '/profile/:id',
+      name: 'profile',
+      component: Profile
     },
     {
       path: '/home',

@@ -16,11 +16,6 @@
         </div>
 
         <div class="form-group">
-          <input type="number" class="form-control" v-model="form.snn" name="" required=""/>
-          <label>SNN</label>
-        </div>
-
-        <div class="form-group">
           <input type="text" class="form-control" v-model="form.phoneNumber" name="" required=""/>
           <label>Phone Number</label>
         </div>
@@ -63,7 +58,6 @@ export default {
       const userInfo = {
         firstName: this.form.firstName,
         lastName: this.form.lastName,
-        snn: this.form.snn,
         phoneNumber: this.form.phoneNumber,
         email: this.form.email,
         password: this.form.password
@@ -71,7 +65,11 @@ export default {
 
       const newMessage = JSON.stringify(userInfo)
 
-      this.$client.publish('UserInfo/test', newMessage)
+      this.$client.publish('user/signUp/request', newMessage, { qos: 1, retain: false }, (error) => {
+        if (error) {
+          console.log(error)
+        }
+      })
     }
   }
 }

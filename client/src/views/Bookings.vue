@@ -35,19 +35,21 @@ export default {
   },
   methods: {
     getUserAppointments() {
-      this.$client.subscribe('ui/userAppointmentsFound')
+      this.$client.subscribe('getUserAppointments/response/found')
       const userIdForAppointments = {
         user: this.$store.state.id,
         requestid: Math.floor(Math.random() * 29805688)
       }
-
       const newRewquest = JSON.stringify(userIdForAppointments)
-      this.$client.publish('availability/getuserappointments', newRewquest)
-      console.log('step 1')
+      this.$client.publish('getUserAppointments/request', newRewquest, { qos: 1, retain: false }, (error) => {
+        if (error) {
+          console.log(error)
+        }
+      })
 
       this.$client.on('message', (topic, payload) => {
       // console.log(topic, payload.toString())
-        if (topic === 'ui/userAppointmentsFound') {
+        if (topic === 'getUserAppointments/response/found') {
           const response = JSON.parse(payload)
           // console.log('appointments: ', response)
           this.appointments = response
@@ -61,7 +63,7 @@ export default {
         requestid: Math.floor(Math.random() * 29805688)
       }
       const newRewquest = JSON.stringify(IdForAppointments)
-      this.$client.publish('availability/deleteappointments', newRewquest, (error) => {
+      this.$client.publish('availability/deleteappointments', newRewquest, { qos: 1, retain: false }, (error) => {
         console.log('Step 1')
         if (error) {
           console.log(error)
