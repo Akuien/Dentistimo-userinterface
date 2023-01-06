@@ -27,8 +27,7 @@ This component acts as both a publisher and subscriber.When the user interacts w
 * VueJS
 * Mapbox
 * Mqtt
-* HiveMQ cloud
-* Geojson
+* HiveMQ websocket
 * Leaflet
 * Vuex
 * uuid 
