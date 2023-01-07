@@ -1,7 +1,7 @@
 <template>
     <div id="app">
     <b-navbar-nav class="navbar">
-      <b-navbar-brand href="/"> Dentistimo
+      <b-navbar-brand href="/home"> Dentistimo
       <img src="../assets/tooth 17.59.57.png">
     </b-navbar-brand>
       <b-navbar type="light" >

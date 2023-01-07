@@ -27,6 +27,13 @@ export default {
       Profile: true
     }
   },
+  mounted() {
+    const user = localStorage.getItem('localCredentials')
+    if (!user) {
+      this.$router.push({ name: 'login' })
+      alert('Please log in first')
+    }
+  },
   methods: {
     handleToggle(value) {
       this.Profile = value
