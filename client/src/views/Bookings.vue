@@ -98,7 +98,8 @@ body {
   border-color: #000000;
 }
 .head {
-  color: rgb(255, 255, 255);
+  margin-top: 20px;
+  color: black;
   font-family: sans-serif;
   font-weight: 900;
 }
