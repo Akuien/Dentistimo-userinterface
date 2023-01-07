@@ -1,13 +1,12 @@
 <template>
     <div id="app">
     <b-navbar-nav class="navbar">
-      <b-navbar-brand href="/"> Dentistimo
+      <b-navbar-brand href="/home"> Dentistimo
       <img src="../assets/tooth 17.59.57.png">
     </b-navbar-brand>
       <b-navbar type="light" >
       <b-nav-item href="/home" icon="">Home</b-nav-item>
       <b-nav-item router-link :to="'/userInformation/' + this.$store.state.id ">Profile</b-nav-item>
-      <b-nav-item href="/" icon="">Login</b-nav-item>
       <b-nav-item href="/" v-on:click="logout" icon="">Logout</b-nav-item>
     </b-navbar>
   </b-navbar-nav>
