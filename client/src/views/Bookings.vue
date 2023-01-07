@@ -1,13 +1,12 @@
 <template>
   <body>
     <div>
-      <!-- <Navbar /> -->
       <div class="container">
         <h1 class="head">APPOINTMENT HISTORY</h1>
+        <p v-if="!appointments.length && message === ''">You do not have upcoming appointments.</p>
         <b-container class="listitem"
        v-for="appointment in appointments"
       v-bind:key="appointment._id">
-          <p><b-col>Appointment Number: {{ appointment.dentist  }}</b-col></p>
           <b-col>On: {{ appointment.day }}</b-col>
           <b-col> Date: {{ appointment.date }}</b-col>
           <b-col> Booked Time: {{ appointment.start }}</b-col><br>
@@ -26,7 +25,8 @@ export default {
   components: { },
   data() {
     return {
-      appointments: undefined
+      appointments: [],
+      message: ''
     }
   },
   mounted() {
@@ -35,13 +35,13 @@ export default {
   },
   methods: {
     getUserAppointments() {
-      this.$client.subscribe('getUserAppointments/response/found')
+      this.$client.subscribe('booking/getUserAppointments/response/found')
       const userIdForAppointments = {
         user: this.$store.state.id,
         requestid: Math.floor(Math.random() * 29805688)
       }
       const newRewquest = JSON.stringify(userIdForAppointments)
-      this.$client.publish('getUserAppointments/request', newRewquest, { qos: 1, retain: false }, (error) => {
+      this.$client.publish('booking/getUserAppointments/request', newRewquest, { qos: 1, retain: false }, (error) => {
         if (error) {
           console.log(error)
         }
@@ -49,7 +49,7 @@ export default {
 
       this.$client.on('message', (topic, payload) => {
       // console.log(topic, payload.toString())
-        if (topic === 'getUserAppointments/response/found') {
+        if (topic === 'booking/getUserAppointments/response/found') {
           const response = JSON.parse(payload)
           // console.log('appointments: ', response)
           this.appointments = response
