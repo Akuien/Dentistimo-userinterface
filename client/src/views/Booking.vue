@@ -250,12 +250,12 @@ export default {
       // this.$client.on('connect', () => {
       console.log('Connected!!')
 
-      this.$client.subscribe('appointment/response', 'subscribed to appointment response')
-      this.$client.publish('appointment/request', JSON.stringify({ date: this.value, start: this.chosenSlot }))
+      this.$client.subscribe('booking/timeSlotAvailability/response', 'subscribed to appointment response')
+      this.$client.publish('booking/timeSlotAvailability/request', JSON.stringify({ date: this.value, start: this.chosenSlot }))
       //  })
 
       this.$client.on('message', (topic, message) => {
-        if (topic === 'appointment/response') {
+        if (topic === 'booking/timeSlotAvailability/response') {
           const availability = JSON.parse(message).available
           this.availability = availability
           if (availability) {

@@ -3,10 +3,10 @@
     <div>
       <div class="container">
         <h1 class="head">APPOINTMENT HISTORY</h1>
-        <p v-if="!appointments.length && message === ''">You do not have upcoming appointments.</p>
         <b-container class="listitem"
        v-for="appointment in appointments"
       v-bind:key="appointment._id">
+      <p v-if="!appointments.length && message === ''">You do not have upcoming appointments.</p>
           <b-col>On: {{ appointment.day }}</b-col>
           <b-col> Date: {{ appointment.date }}</b-col>
           <b-col> Booked Time: {{ appointment.start }}</b-col><br>
@@ -57,20 +57,20 @@ export default {
       })
     },
     deleteAppointment(appointmentid) {
-      this.$client.subscribe('ui/deleteappointments')
+      this.$client.subscribe('booking/deleteappointments/response')
       const IdForAppointments = {
         appointment: appointmentid,
         requestid: Math.floor(Math.random() * 29805688)
       }
       const newRewquest = JSON.stringify(IdForAppointments)
-      this.$client.publish('availability/deleteappointments', newRewquest, { qos: 1, retain: false }, (error) => {
+      this.$client.publish('booking/deleteappointments/request', newRewquest, { qos: 1, retain: false }, (error) => {
         console.log('Step 1')
         if (error) {
           console.log(error)
         }
       })
       this.$client.on('message', (topic, payload) => {
-        if (topic === 'ui/deleteappointments') {
+        if (topic === 'booking/deleteappointments/response') {
           console.log('deleted')
 
           const response = JSON.parse(payload)
