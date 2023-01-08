@@ -1,5 +1,8 @@
 <template>
   <div class="login-box">
+    <b-alert v-model="showDismissibleAlert" variant="danger" dismissible class="failed-booked">
+          {{  notify }}
+      </b-alert>
 <form @submit.prevent="login">
       <div class="head">
       <h2>
@@ -47,7 +50,9 @@ export default {
         email: '',
         password: ''
       },
-      show: true
+      show: true,
+      notify: '',
+      showDismissibleAlert: false
     }
   },
   mounted() {
@@ -98,7 +103,7 @@ export default {
     },
     loginResponse() {
       this.$client.on('message', (topic, message) => {
-        if (topic === 'user/login/response') {
+        if (topic === 'user/login/response/approved') {
           const userRespond = JSON.parse(message)
           this.$store.state.id = userRespond._id
           this.$store.state.password = userRespond.password
@@ -120,6 +125,9 @@ export default {
           )
           this.$router.push('/home')
           console.log(localStorage)
+        } else if (topic === 'user/login/response/notApproved') {
+          this.showDismissibleAlert = true
+          this.notify = 'Invalid log in credentials, try again.'
         }
       })
     }
