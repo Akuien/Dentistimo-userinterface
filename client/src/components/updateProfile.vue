@@ -13,15 +13,15 @@
                 <div id= "card">
                   <div class="card-body">
 
-                      <b-form-group id="input-group-1" label="Edit your first name:" label-for="input-1">
+                      <b-form-group id="input-group-1" label="Edit new first name:" label-for="input-1">
                           <b-form-input id="input-1"
                             v-model="form.firstName"
-                            placeholder="Enter new first name"
+                            placeholder="Enter new last name"
                             required>
                           </b-form-input>
                       </b-form-group>
 
-                      <b-form-group id="input-group-2" label="Edit your last name:" label-for="input-2">
+                      <b-form-group id="input-group-2" label="Edit new last name:" label-for="input-2">
                         <b-form-input
                           id="input-2"
                           v-model="form.lastName"
@@ -30,7 +30,7 @@
                         </b-form-input>
                       </b-form-group>
 
-                      <b-form-group id="input-group-3" label="Edit your phone number:" label-for="input-3">
+                      <b-form-group id="input-group-3" label="Edit new phone number:" label-for="input-3">
                         <b-form-input
                           id="input-3"
                           v-model="form.phoneNumber"
@@ -65,6 +65,9 @@ export default {
     }
   },
   mounted() {
+    this.form.firstName = this.$store.state.firstName
+    this.form.lastName = this.$store.state.lastName
+    this.form.phoneNumber = this.$store.state.phoneNumber
     this.subscribe()
     this.userUpdated()
     this.$client.on('connect', () => {
@@ -98,7 +101,6 @@ export default {
           console.log(userInfo)
         }
       })
-      // this.$router.push('/profile/' + this.$store.state.id)
     },
 
     userUpdated() {

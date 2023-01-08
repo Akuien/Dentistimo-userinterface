@@ -29,8 +29,8 @@
           <input type="password" class="form-control" v-model="form.password" name="" required=""/>
           <label>Password</label>
         </div>
-
-        <button style="background:#3D5332" class="btn" @click="sendUserDetails()">Sign Up</button>
+        <button style="background:#3D5332" class="btn" @click="sendUserDetails()"
+        :disabled = "!form.firstName || !form.lastName || !form.phoneNumber || !form.email || !form.password">Sign Up</button>
       </form>
     </div>
   </template>

@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import UserInformation from './views/UserInformation.vue'
-import Profile from './components/Profile.vue'
 import logIn from './views/logIn.vue'
 import VerifyEmail from './views/VerifyEmail.vue'
 import Booking from './views/Booking.vue'
@@ -25,22 +24,15 @@ export default new Router({
       component: UserInformation
     },
     {
-      path: '/profile/:id',
-      name: 'profile',
-      component: Profile
-    },
-    {
       path: '/home/:id',
       name: 'Home',
       component: Home
     },
-
     {
       path: '/booking/:id',
       name: 'Booking',
       component: Booking
     },
-
     {
       path: '/verify/:id',
       name: 'VerifyEmail',
@@ -51,6 +43,5 @@ export default new Router({
       name: 'Bookings',
       component: Bookings
     }
-
   ]
 })
