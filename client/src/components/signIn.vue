@@ -123,7 +123,7 @@ export default {
               phoneNumber: userRespond.phoneNumber
             })
           )
-          this.$router.push('/home')
+          this.$router.push('/home/' + this.$store.state.id)
           console.log(localStorage)
         } else if (topic === 'user/login/response/notApproved') {
           this.showDismissibleAlert = true

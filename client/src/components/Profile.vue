@@ -84,7 +84,6 @@ export default {
   font-size: 4rem;
   font-family: 'Jost', sans-serif;
   font-style: italic;
-  top: 4vw;
   color: #000000;
 }
 #tooth{
