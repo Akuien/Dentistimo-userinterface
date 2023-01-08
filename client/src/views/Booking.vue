@@ -65,6 +65,11 @@
        <b-alert v-model="showDismissibleAlert2" variant="danger" dismissible class="failed-booked">
           {{  notify2 }}
       </b-alert>
+
+     <b-button v-if="showCheckAvailabilityButton" :disabled="disableBtn"  @click="checkAvailability" class="button-check">
+             Check availability
+            </b-button>
+
       <div v-if="availability === true">
               <b-alert class="freeSlot" v-model="showSuccessAlert"
               v-if="showSuccessAlert"
@@ -72,7 +77,7 @@
               variant="light" dismissible>
                 The requested appointment time is available
                </b-alert>
-           <button  type="submit" class="btn-book"> Book now </button>
+           <button  :disabled="disableMoreBookings" type="submit" class="btn-book"> Book now </button>
            </div>
 
           <div v-else-if="availability === false">
@@ -84,9 +89,6 @@
               The requested appointment time is not available
     </b-alert>
   </div>
-     <b-button  :disabled="disableBtn"  @click="checkAvailability" class="button-check">
-             Check availability
-            </b-button>
 
 </b-form>
     </div>
@@ -135,11 +137,13 @@ export default {
       thisDay: 9,
       chosenSlot: '',
       disableBtn: true,
+      disableMoreBookings: false,
       warning: false,
       showSuccessAlert: false,
       showFailAlert: false,
       numberOfDentists: 0,
-      email: ''
+      email: '',
+      showCheckAvailabilityButton: true
     }
   },
   mounted() {
@@ -232,6 +236,7 @@ export default {
         if (topic === 'booking/newAppointment/response/approved') {
           this.notify = 'Your have booked a new appointment!'
           this.showDismissibleAlert = true
+          this.disableMoreBookings = true
           const response = JSON.parse(message)
           console.log(response)
         } else if (topic === 'booking/newAppointment/notapproved') {
@@ -261,6 +266,7 @@ export default {
           if (availability) {
             console.log('The requested appointment time is available')
             this.showSuccessAlert = true
+            this.showCheckAvailabilityButton = false
           } else if (!availability) {
             console.log('The requested appointment time is not available')
             this.showFailAlert = true
@@ -398,7 +404,7 @@ margin-right: 20%;
 padding: 10px;
 font-size: 20px;
 font-weight: bold;
-background-color: #59e5fd;
+background-color: #8fe6e0;
 margin-bottom: 10px;
 }
 .takenSlot {
