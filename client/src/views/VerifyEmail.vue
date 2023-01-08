@@ -2,7 +2,7 @@
   <div>
     <table
       role="presentation"
-      style="width: 100%; border-collapse: collapse; border: 0px; border-spacing: 0px; font-family: Arial, Helvetica, sans-serif; background-color: rgb(239, 239, 239);"
+      style="width: 100%; border-collapse: collapse; border: 0px; border-spacing: 0px; font-family: monospace, Avenir, Helvetica, Arial, sans-serif; background-color: #FDF0CA;"
     >
       <tbody>
         <tr>
@@ -80,4 +80,6 @@ export default {
   }
 }
 </script>
-<style lang="sass" scoped></style>
+<style lang="sass" scoped>
+
+</style>
