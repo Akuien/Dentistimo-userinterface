@@ -193,6 +193,7 @@ export default {
       if (chosenTime >= stInt && chosenTime < clInt) {
         this.warning = false
         this.disableBtn = false
+        this.showCheckAvailabilityButton = true
       } else {
         this.warning = true
         this.disableBtn = true
