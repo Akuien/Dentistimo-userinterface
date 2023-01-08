@@ -48,5 +48,5 @@ This component acts as both a publisher and subscriber.When the user interacts w
 * Cynthia Tarwireyi
 * Nazli Moghaddam
 * Jonna Johansson
-* Sergey Balan
+
 
