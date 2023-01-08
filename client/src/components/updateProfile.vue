@@ -44,6 +44,7 @@
                 </div>
               </div>
             </div>
+            <br/>
           </div>
           <b-button @click="updateUser()" id="buttons">  Update  </b-button>
         </b-form>
@@ -83,12 +84,11 @@ export default {
     updateUser() {
       const user = {
         id: this.$store.state.id,
-        firstName: this.form.firstName,
-        lastName: this.form.lastName,
+        firstName: this.form.firstName || this.$store.state.firstName,
+        lastName: this.form.lastName || this.$store.state.lastName,
         email: this.$store.state.email,
-        phoneNumber: this.form.phoneNumber,
+        phoneNumber: this.form.phoneNumber || this.$store.state.phoneNumber,
         password: this.$store.state.password
-
       }
       const userInfo = JSON.stringify(user)
       this.$client.publish('user/updateUser/request', userInfo, { qos: 1, retain: false }, (error) => {
