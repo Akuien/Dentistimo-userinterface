@@ -34,7 +34,6 @@ export default {
   },
   mounted() {
     this.$client.on('connect', () => {
-      // console.log('Connected!')
     })
     this.$client.subscribe('getAllDentists/response')
     this.$client.publish('dentist/getAllDentists/request', 'The ui component wants dentists list for the map!!', { qos: 1, retain: false }, (error) => {

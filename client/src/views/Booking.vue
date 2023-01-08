@@ -156,7 +156,6 @@ export default {
 
     this.$client.on('message', (topic, payload) => {
       if (topic === 'getDentistById/response') {
-        console.log(topic, payload.toString())
         const response = JSON.parse(payload)
         console.log('Dentist: ', response)
 
@@ -208,11 +207,9 @@ export default {
       return weekday === 0 || weekday === 6
     },
     handleSubmit() {
-      console.log('handleSubmit')
       const weekday = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
       const dayOfWeek = new Date(this.value)
       const theDay = dayOfWeek.getDay()
-      console.log('this is the email : ' + this.$store.state.email)
       const bookingInfo = {
         user: this.$store.state.id,
         day: weekday[theDay],
