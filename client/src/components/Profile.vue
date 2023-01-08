@@ -49,13 +49,13 @@
                 <hr>
              </div>
             </div>
+            <p>
+            <b-card id="mypostsitem" align-h="center" >
+             <a :href="'/userAppointments/' + this.$store.state.id">See Upcoming Appointments</a>
+          </b-card>
+            </p>
           </div>
         </div>
-        <p>
-          <router-link :to="'/userAppointments/' + this.$store.state.id"
-            >Your Appointment History</router-link>
-        </p>
-
       </div>
   </div>
 </template>
@@ -103,6 +103,18 @@ export default {
 }
 .text{
   font-weight: bold;
+}
+#mypostsitem{
+  margin-bottom: 2.5em;
+  margin-top: 0.5em;
+  background-color: rgb(125, 184, 190);
+  color: #000000;
+  border: 2px solid #d4e174;
+  border-radius: 10px;
+  padding: 2px 2px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
 }
 
 </style>
