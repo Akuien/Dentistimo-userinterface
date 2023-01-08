@@ -3,10 +3,10 @@
     <div>
       <div class="container">
         <h1 class="head">APPOINTMENT HISTORY</h1>
+        <p v-if="!appointments.length && message === ''">You do not have any upcoming appointments.</p>
         <b-container class="listitem"
        v-for="appointment in appointments"
       v-bind:key="appointment._id">
-      <p v-if="!appointments.length && message === ''">You do not have upcoming appointments.</p>
           <b-col>On: {{ appointment.day }}</b-col>
           <b-col> Date: {{ appointment.date }}</b-col>
           <b-col> Booked Time: {{ appointment.start }}</b-col><br>
